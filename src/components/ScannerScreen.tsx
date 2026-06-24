@@ -20,6 +20,7 @@ import {
   Code
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
+import { useUser } from "../context/UserContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import { predictSpam, getModelConfig } from "../services/api";
 import { ScanResult, ScanHistoryItem } from "../types";
@@ -44,6 +45,7 @@ const scanStages = [
 
 export const ScannerScreen: React.FC = () => {
   const { settings } = useSettings();
+  const { profile } = useUser();
   const [, setHistory] = useLocalStorage<ScanHistoryItem[]>("email_security_history", getSeedHistory());
   const [scanStatus, setScanStatus] = useState<"idle" | "scanning" | "success" | "error">("idle");
   const [currentStage, setCurrentStage] = useState(0);
@@ -174,6 +176,8 @@ export const ScannerScreen: React.FC = () => {
         processing_time_ms: result.processing_time_ms,
         suspicious_keywords: result.suspicious_keywords,
         reasons: result.reasons,
+        userName: profile.name,
+        userEmail: profile.email,
       };
 
       if (settings.autoSaveHistory) {

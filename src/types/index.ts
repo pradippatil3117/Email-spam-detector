@@ -4,6 +4,12 @@ export interface EmailInput {
   body: string;
 }
 
+export interface UserProfile {
+  name: string;
+  email: string;
+  isDemo: boolean;
+}
+
 export interface ScanResult {
   prediction: "Spam" | "Safe";
   confidence: number; // probability between 0 and 1 (or 0 and 100)
@@ -37,6 +43,8 @@ export interface ScanHistoryItem extends EmailInput {
   processing_time_ms: number;
   suspicious_keywords: string[];
   reasons: string[];
+  userName?: string;
+  userEmail?: string;
 }
 
 export interface UserSettings {
@@ -71,4 +79,7 @@ export interface UserSettings {
   developerMode: boolean;
   enableDebugInfo: boolean;
   showResponseInspector: boolean;
+
+  // SECTION 6: User Preferences
+  autoRestoreProfile: boolean;
 }

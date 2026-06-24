@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "../context/SettingsContext";
+import { useUser, getInitials, getAvatarColor, avatarColorMap } from "../context/UserContext";
 import {
   LayoutDashboard,
   ShieldAlert,
@@ -17,11 +18,19 @@ import {
   Search,
   ChevronLeft,
   ChevronRight,
-  User,
   Palette,
-  AlertTriangle
+  AlertTriangle,
+  LogIn,
+  LogOut,
+  UserCog,
+  IdCard,
+  Users,
+  CheckCircle2,
 } from "lucide-react";
 import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { ProfileModal } from "./ProfileModal";
+import { ProfileCard } from "./ProfileCard";
+import { LogoutConfirmModal } from "./LogoutConfirmModal";
 
 interface NavItem {
   name: string;
@@ -45,8 +54,14 @@ const accentColors = [
   { id: "amber", name: "Amber", class: "bg-amber-500 border-amber-400" },
 ] as const;
 
+// ─────────────────────────────────────────────────────────
+// Layout
+// ─────────────────────────────────────────────────────────
+
 export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { settings, updateSettings, isBackendOnline, triggerHealthCheck } = useSettings();
+  const { profile, switchToDemo } = useUser();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
     try {
@@ -59,6 +74,21 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [isRefreshingHealth, setIsRefreshingHealth] = useState(false);
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [accentDropdownOpen, setAccentDropdownOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+  // Modal states
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showProfileCard, setShowProfileCard] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  // Toast notification
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Ref for returning focus to profile button after modal close
+  const profileButtonRef = useRef<HTMLButtonElement>(null);
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -91,6 +121,38 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     setIsRefreshingHealth(false);
   };
 
+  const showToast = useCallback((msg: string) => {
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    setToast(msg);
+    toastTimerRef.current = setTimeout(() => setToast(null), 3000);
+  }, []);
+
+  const handleProfileSuccess = useCallback(
+    (name: string) => {
+      setShowLoginModal(false);
+      setShowEditModal(false);
+      showToast(`Welcome back, ${name.split(" ")[0]}!`);
+      setTimeout(() => profileButtonRef.current?.focus(), 80);
+    },
+    [showToast]
+  );
+
+  const handleLogoutConfirm = useCallback(() => {
+    setShowLogoutConfirm(false);
+    switchToDemo();
+    showToast("Switched to Demo User.");
+    setTimeout(() => profileButtonRef.current?.focus(), 80);
+  }, [switchToDemo, showToast]);
+
+  const handleSwitchToDemo = useCallback(() => {
+    setProfileDropdownOpen(false);
+    switchToDemo();
+    showToast("Switched to Demo User.");
+  }, [switchToDemo, showToast]);
+
+  const color = getAvatarColor(profile.name);
+  const colorCls = avatarColorMap[color];
+  const initials = getInitials(profile.name);
 
   return (
     <div className="min-h-screen flex bg-background text-foreground transition-colors duration-300">
@@ -226,17 +288,127 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
               </div>
             </div>
 
-            {/* Profile Placement */}
-            <div className={`flex items-center gap-3 border border-border/5 rounded-xl ${isCollapsed ? "p-1.5 justify-center" : "p-3 bg-muted/20"}`}>
-              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary border border-primary/20 flex items-center justify-center font-bold text-sm shrink-0">
-                <User className="w-4 h-4" />
-              </div>
-              {!isCollapsed && (
-                <div className="min-w-0 flex-1">
-                  <p className="text-xs font-semibold truncate">Lisa Mercer</p>
-                  <p className="text-[10px] text-muted-foreground truncate">lisa@enterprise-corp.com</p>
+            {/* ── Profile Widget ── */}
+            <div className="relative">
+              <button
+                ref={profileButtonRef}
+                onClick={() => {
+                  setProfileDropdownOpen((v) => !v);
+                  setThemeDropdownOpen(false);
+                  setAccentDropdownOpen(false);
+                }}
+                aria-label="Open user profile menu"
+                aria-expanded={profileDropdownOpen}
+                className={`w-full flex items-center gap-3 border border-border/5 rounded-xl transition-all hover:bg-muted/30 focus:outline-none focus:ring-2 focus:ring-primary/20 ${
+                  isCollapsed ? "p-1.5 justify-center" : "p-3 bg-muted/20"
+                }`}
+              >
+                {/* Avatar */}
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs border shrink-0 transition-colors duration-300 ${colorCls.bg} ${colorCls.text} ${colorCls.border}`}
+                >
+                  {initials}
                 </div>
-              )}
+                {!isCollapsed && (
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-xs font-semibold truncate">{profile.name}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{profile.email}</p>
+                  </div>
+                )}
+              </button>
+
+              {/* Profile Dropdown */}
+              <AnimatePresence>
+                {profileDropdownOpen && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setProfileDropdownOpen(false)} />
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.15 }}
+                      className={`absolute z-20 glass-panel border rounded-xl shadow-xl overflow-hidden ${
+                        isCollapsed ? "left-full ml-2 bottom-0 w-48" : "bottom-full mb-2 left-0 right-0"
+                      }`}
+                    >
+                      {/* Dropdown Header */}
+                      <div className="px-3 py-2.5 border-b border-border/10">
+                        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
+                          {profile.isDemo ? "Demo Mode" : "Personal Profile"}
+                        </p>
+                      </div>
+
+                      <div className="p-1.5 space-y-0.5">
+                        {/* View Profile */}
+                        <button
+                          onClick={() => {
+                            setProfileDropdownOpen(false);
+                            setShowProfileCard(true);
+                          }}
+                          className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+                        >
+                          <IdCard className="w-3.5 h-3.5 shrink-0" />
+                          <span>View Profile</span>
+                        </button>
+
+                        {/* Demo User: show Login button */}
+                        {profile.isDemo && (
+                          <button
+                            onClick={() => {
+                              setProfileDropdownOpen(false);
+                              setShowLoginModal(true);
+                            }}
+                            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-primary hover:bg-primary/5 transition-all"
+                          >
+                            <LogIn className="w-3.5 h-3.5 shrink-0" />
+                            <span>Personalize Dashboard</span>
+                          </button>
+                        )}
+
+                        {/* Logged-in User: Edit, Switch, Logout */}
+                        {!profile.isDemo && (
+                          <>
+                            <button
+                              onClick={() => {
+                                setProfileDropdownOpen(false);
+                                setShowEditModal(true);
+                              }}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+                            >
+                              <UserCog className="w-3.5 h-3.5 shrink-0" />
+                              <span>Edit Profile</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                setProfileDropdownOpen(false);
+                                handleSwitchToDemo();
+                              }}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-all"
+                            >
+                              <Users className="w-3.5 h-3.5 shrink-0" />
+                              <span>Switch to Demo User</span>
+                            </button>
+
+                            <div className="border-t border-border/10 my-1" />
+
+                            <button
+                              onClick={() => {
+                                setProfileDropdownOpen(false);
+                                setShowLogoutConfirm(true);
+                              }}
+                              className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-semibold text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all"
+                            >
+                              <LogOut className="w-3.5 h-3.5 shrink-0" />
+                              <span>Logout</span>
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -405,7 +577,7 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
           </div>
         </header>
- 
+
         {/* Content body */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl w-full mx-auto">
           <MotionConfig transition={
@@ -431,18 +603,18 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
                     {/* Decorative error glow background */}
                     <div className="absolute -top-12 -left-12 w-24 h-24 bg-destructive/10 rounded-full blur-2xl pointer-events-none" />
                     <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-warning/10 rounded-full blur-2xl pointer-events-none" />
-  
+
                     <div className="mx-auto w-16 h-16 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive flex items-center justify-center shadow-lg">
                       <AlertTriangle className="w-8 h-8 animate-bounce" />
                     </div>
-  
+
                     <div className="space-y-2">
                       <h3 className="text-xl font-bold tracking-tight">Security Gateway Offline</h3>
                       <p className="text-muted-foreground text-sm leading-relaxed">
                         Aegis cannot communicate with the classification server at <code className="px-1.5 py-0.5 rounded bg-muted text-xs font-semibold">{settings.apiBaseUrl}</code>. Please check your network connection or verify settings.
                       </p>
                     </div>
-  
+
                     <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
                       <button
                         onClick={handleRefreshHealth}
@@ -487,6 +659,50 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
           </MotionConfig>
         </main>
       </div>
+
+      {/* ── Global Toast ── */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key="layout-toast"
+            initial={{ opacity: 0, y: -20, x: "-50%" }}
+            animate={{ opacity: 1, y: 0, x: "-50%" }}
+            exit={{ opacity: 0, y: -20, x: "-50%" }}
+            className="fixed top-20 left-1/2 z-[60] px-4 py-2.5 rounded-xl bg-primary text-white text-xs font-bold shadow-xl flex items-center gap-2 border border-white/10"
+          >
+            <CheckCircle2 className="w-4 h-4 shrink-0" />
+            <span>{toast}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Modals ── */}
+      {showLoginModal && (
+        <ProfileModal
+          mode="login"
+          onClose={() => setShowLoginModal(false)}
+          onSuccess={handleProfileSuccess}
+        />
+      )}
+      {showEditModal && (
+        <ProfileModal
+          mode="edit"
+          onClose={() => setShowEditModal(false)}
+          onSuccess={handleProfileSuccess}
+        />
+      )}
+      {showProfileCard && (
+        <ProfileCard
+          onClose={() => setShowProfileCard(false)}
+          onEditProfile={() => setShowEditModal(true)}
+        />
+      )}
+      {showLogoutConfirm && (
+        <LogoutConfirmModal
+          onCancel={() => setShowLogoutConfirm(false)}
+          onConfirm={handleLogoutConfirm}
+        />
+      )}
     </div>
   );
 };

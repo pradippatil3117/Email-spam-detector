@@ -34,6 +34,7 @@ const defaultSettings: UserSettings = {
   developerMode: false,
   enableDebugInfo: false,
   showResponseInspector: false,
+  autoRestoreProfile: true,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);

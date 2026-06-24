@@ -476,6 +476,20 @@ export const SettingsScreen: React.FC = () => {
                               className="w-4 h-4 rounded border-border/20 text-primary focus:ring-0 cursor-pointer"
                             />
                           </label>
+
+                          <label className="flex items-center justify-between p-3 rounded-xl border hover:bg-muted/10 transition-all font-semibold cursor-pointer">
+                            <div className="space-y-0.5">
+                              <span className="font-bold">Restore Last Profile on Refresh</span>
+                              <p className="text-[10px] text-muted-foreground leading-normal">Automatically restore your saved profile when the page reloads. When disabled, every session starts as Demo User.</p>
+                            </div>
+                            <input
+                              type="checkbox"
+                              checked={settings.autoRestoreProfile}
+                              onChange={(e) => updateSettings({ autoRestoreProfile: e.target.checked })}
+                              aria-label="Toggle automatic profile restore on refresh"
+                              className="w-4 h-4 rounded border-border/20 text-primary focus:ring-0 cursor-pointer"
+                            />
+                          </label>
                         </div>
                       </div>
                     </motion.div>

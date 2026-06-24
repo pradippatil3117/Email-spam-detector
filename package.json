@@ -1,7 +1,7 @@
 {
-  "name": "react-example",
+  "name": "aegis-email-security-dashboard",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev:backend": "cd backend && venv\\Scripts\\python -m uvicorn app.main:app --host 127.0.0.1 --port 8000",
