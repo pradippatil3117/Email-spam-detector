@@ -41,6 +41,7 @@ export interface ScanHistoryItem extends EmailInput {
 
 export interface UserSettings {
   darkMode: boolean;
+  themeMode: "light" | "dark" | "system";
   themeColor: "blue" | "emerald" | "violet" | "amber";
   apiBaseUrl: string;
   defaultThreshold: number;

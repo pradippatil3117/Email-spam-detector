@@ -11,7 +11,8 @@ interface SettingsContextType {
 }
 
 const defaultSettings: UserSettings = {
-  darkMode: true, // Default to dark mode for modern enterprise feel
+  darkMode: true,
+  themeMode: "dark", // Default to dark mode for modern enterprise feel
   themeColor: "blue",
   apiBaseUrl: "/api",
   defaultThreshold: 0.5,
@@ -28,7 +29,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isBackendOnline, setIsBackendOnline] = useState<boolean | null>(null);
 
   const updateSettings = useCallback((newSettings: Partial<UserSettings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
+    setSettings((prev) => {
+      const next = { ...prev, ...newSettings };
+      if (newSettings.themeMode) {
+        if (newSettings.themeMode === "dark") {
+          next.darkMode = true;
+        } else if (newSettings.themeMode === "light") {
+          next.darkMode = false;
+        } else if (newSettings.themeMode === "system") {
+          next.darkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        }
+      }
+      return next;
+    });
   }, [setSettings]);
 
   const triggerHealthCheck = useCallback(async () => {
@@ -47,6 +60,19 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     const interval = setInterval(triggerHealthCheck, 15000); // check every 15 seconds
     return () => clearInterval(interval);
   }, [triggerHealthCheck]);
+
+  // Listen to system theme changes if themeMode is "system"
+  useEffect(() => {
+    if (settings.themeMode !== "system") return;
+
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      updateSettings({ darkMode: e.matches });
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, [settings.themeMode, updateSettings]);
 
   // Apply Theme effects
   useEffect(() => {
