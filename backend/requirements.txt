@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+bcrypt
+python-jose[cryptography]
+python-multipart
+passlib[bcrypt]
+scikit-learn
+pandas
+numpy
+joblib
+nltk
+beautifulsoup4
+matplotlib
+seaborn
+

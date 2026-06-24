@@ -1,0 +1,23 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Python virtual environment
+venv/
+backend/venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local database
+sql_app.db
+*.db
+
+# Antigravity/IDE files
+.antigravity/
