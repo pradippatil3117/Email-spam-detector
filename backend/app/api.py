@@ -12,11 +12,18 @@ preprocessor = TextPreprocessor()
 
 @router.post("/predict", response_model=PredictionOutput)
 async def predict_spam(email: EmailInput):
-    # Combine subject and body for analysis
-    combined_text = f"{email.subject} {email.body}"
-    cleaned_text = preprocessor.clean_text(combined_text)
-    
-    result = inference_service.predict(cleaned_text)
+    result = inference_service.predict(
+        text=f"{email.subject} {email.body}",
+        sender=email.sender,
+        subject=email.subject,
+        body=email.body
+    )
+
+    print("\n================ API RESULT ================")
+    print(type(result))
+    print(result)
+    print("===========================================\n")
+
     return result
 
 @router.get("/model/config")

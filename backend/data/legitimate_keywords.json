@@ -1,0 +1,26 @@
+{
+  "business_terms": [
+    "meeting", "agenda", "project", "deadline", "milestone", "deliverable",
+    "review", "feedback", "presentation", "proposal", "collaboration",
+    "schedule", "sync", "standup", "sprint", "backlog", "retrospective",
+    "velocity", "stakeholder", "client", "customer", "contract", "invoice",
+    "purchase order", "budget", "forecast", "quarter", "annual report"
+  ],
+  "professional_greetings": [
+    "dear team", "hi team", "good morning", "good afternoon", "hope you are well",
+    "following up", "as discussed", "please find attached", "kindly", "regards",
+    "best regards", "sincerely", "thank you for", "appreciate your", "per our discussion"
+  ],
+  "hr_terms": [
+    "leave approved", "time off", "vacation", "onboarding", "training",
+    "performance review", "annual review", "salary", "benefits", "policy",
+    "compliance", "code of conduct", "employee handbook", "orientation",
+    "probation period", "promotion", "job description", "interview"
+  ],
+  "technical_terms": [
+    "deployment", "release", "bug fix", "pull request", "code review",
+    "repository", "api", "database", "server", "infrastructure", "monitoring",
+    "logging", "testing", "staging", "production", "rollback", "hotfix",
+    "architecture", "microservices", "documentation", "specification"
+  ]
+}

@@ -8,21 +8,30 @@ import {
   Shield,
   ShieldAlert,
   ShieldCheck,
-  Cpu,
-  Clock,
   Activity,
   Trash2,
   AlertCircle,
   CheckCircle2,
   RefreshCw,
   AlertTriangle,
-  XCircle,
-  Code
+  Code,
+  Award,
+  Gift,
+  UserCheck,
+  Clipboard,
+  HelpCircle,
+  Globe,
+  Link as LinkIcon,
+  FileText,
+  Flame,
+  ShieldX,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 import { useUser } from "../context/UserContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { predictSpam, getModelConfig } from "../services/api";
+import { predictSpam } from "../services/api";
 import { ScanResult, ScanHistoryItem } from "../types";
 import { getSeedHistory } from "../utils/seedData";
 
@@ -52,26 +61,7 @@ export const ScannerScreen: React.FC = () => {
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [devMode, setDevMode] = useState(false);
-  const [modelThreshold, setModelThreshold] = useState<number>(0.72);
-
-  // Fetch model threshold from backend on mount
-  useEffect(() => {
-    let active = true;
-    const fetchConfig = async () => {
-      try {
-        const config = await getModelConfig();
-        if (active && config && config.threshold) {
-          setModelThreshold(config.threshold);
-        }
-      } catch {
-        // Fallback silently without logging to console
-      }
-    };
-    fetchConfig();
-    return () => {
-      active = false;
-    };
-  }, []);
+  const [techDetailsOpen, setTechDetailsOpen] = useState(false);
 
   const {
     register,
@@ -208,69 +198,7 @@ export const ScannerScreen: React.FC = () => {
     }
   };
 
-  // Determine confidence-aware messaging properties
-  const getConfidenceMessaging = (score: number) => {
-    const threshold = settings.spamThresholdOverride;
-    const isSpam = score >= threshold;
 
-    if (!isSpam) {
-      return {
-        status: "SAFE",
-        recommendation: "Safe to open.",
-        riskLevel: "Low",
-        description: "The classifier found no spam indicators above the configured threshold.",
-        badgeColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
-        barColor: "bg-emerald-500",
-        gradientClass: "from-emerald-500/15 to-emerald-600/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
-        glowColor: "shadow-emerald-500/10",
-        icon: ShieldCheck,
-        recoCard: {
-          title: "Safe to Open",
-          desc: "This email has passed all security checks. No threat patterns or suspicious keywords were detected above the threshold.",
-          style: "bg-emerald-500/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
-          icon: CheckCircle2
-        }
-      };
-    } else if (score >= threshold && score < 0.7) {
-      return {
-        status: "BORDERLINE",
-        recommendation: "Manual review recommended.",
-        riskLevel: "Medium",
-        description: "This email contains moderate indicators near the decision boundary.",
-        badgeColor: "text-amber-500 bg-amber-500/10 border-amber-500/20",
-        barColor: "bg-amber-500",
-        gradientClass: "from-amber-500/15 to-amber-600/5 border-amber-500/20 text-amber-600 dark:text-amber-400",
-        glowColor: "shadow-amber-500/10",
-        icon: AlertTriangle,
-        recoCard: {
-          title: "Review Before Opening",
-          desc: "Moderate probability of promotional or phishing patterns. Inspect links and attachments carefully before opening.",
-          style: "bg-amber-500/5 border-amber-500/20 text-amber-600 dark:text-amber-400",
-          icon: AlertTriangle
-        }
-      };
-    } else {
-      return {
-        status: "SPAM",
-        recommendation: "Delete or quarantine immediately.",
-        riskLevel: "High",
-        description: "High spam probability detected. Contains active threat markers or phishing indicators.",
-        badgeColor: "text-destructive bg-destructive/10 border-destructive/20",
-        barColor: "bg-destructive",
-        gradientClass: "from-destructive/15 to-destructive/20 border-destructive/20 text-destructive dark:text-destructive-foreground",
-        glowColor: "shadow-destructive/10",
-        icon: ShieldAlert,
-        recoCard: {
-          title: "Delete Immediately",
-          desc: "Critical spam signature matched. Recommended action is immediate quarantine or deletion to prevent security breach.",
-          style: "bg-destructive/5 border-destructive/20 text-destructive dark:text-destructive-foreground",
-          icon: XCircle
-        }
-      };
-    }
-  };
-
-  const currentResultMeta = scanResult ? getConfidenceMessaging(scanResult.spam_score) : null;
 
   return (
     <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start ${settings.defaultScanView === "full" ? "max-w-4xl mx-auto" : ""}`}>
@@ -514,7 +442,7 @@ export const ScannerScreen: React.FC = () => {
           )}
 
           {/* SCENARIO 3: Scan Results Display */}
-          {scanStatus === "success" && scanResult && currentResultMeta && (
+          {scanStatus === "success" && scanResult && (
             <motion.div
               key="success"
               initial={{ opacity: 0, y: 15 }}
@@ -522,196 +450,464 @@ export const ScannerScreen: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               className="space-y-6"
             >
-              {/* Header Gradient Card with custom status */}
-              <div
-                className={`p-6 rounded-2xl shadow-xl border relative overflow-hidden flex flex-col justify-between ${currentResultMeta.gradientClass} ${currentResultMeta.glowColor}`}
-              >
-                {/* Glow ring overlay */}
-                <div className="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none -translate-y-12 translate-x-12" />
-
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-black/10 dark:bg-white/10 px-2.5 py-0.5 rounded border border-border/5">
-                      Audit Classification
-                    </span>
-                    <h3 className="text-3xl font-extrabold tracking-tight mt-1">
-                      {currentResultMeta.status}
-                    </h3>
-                  </div>
-                  <div className={`p-3 rounded-xl border shadow-lg ${currentResultMeta.badgeColor}`}>
-                    <currentResultMeta.icon className="w-7 h-7" />
-                  </div>
+              {/* Circular Gauge and Threat Summary Card */}
+              <div className="p-6 rounded-2xl glass-panel border shadow-lg flex flex-col md:flex-row items-center gap-6">
+                {/* Circular Gauge */}
+                <div className="relative shrink-0 flex items-center justify-center">
+                  {(() => {
+                    const radius = 38;
+                    const circumference = 2 * Math.PI * radius;
+                    const score = scanResult.threat_score ?? Math.round(scanResult.spam_score * 100);
+                    const strokeDashoffset = circumference - (score / 100) * circumference;
+                    
+                    let strokeColor = "stroke-emerald-500";
+                    let textColor = "text-emerald-500";
+                    if (score > 90) {
+                      strokeColor = "stroke-red-600 dark:stroke-destructive";
+                      textColor = "text-red-600 dark:text-destructive";
+                    } else if (score > 70) {
+                      strokeColor = "stroke-orange-500";
+                      textColor = "text-orange-500";
+                    } else if (score > 45) {
+                      strokeColor = "stroke-amber-500";
+                      textColor = "text-amber-500";
+                    } else if (score > 20) {
+                      strokeColor = "stroke-yellow-500";
+                      textColor = "text-yellow-500";
+                    }
+                    
+                    return (
+                      <>
+                        <svg className="w-24 h-24 transform -rotate-90">
+                          <circle cx="48" cy="48" r={radius} className="stroke-muted/30 fill-none" strokeWidth="7" />
+                          <circle cx="48" cy="48" r={radius} className={`${strokeColor} fill-none transition-all duration-1000`} strokeWidth="7" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className={`text-2xl font-extrabold ${textColor}`}>{score}</span>
+                          <span className="text-[9px] uppercase tracking-wider font-bold text-muted-foreground leading-none">Score</span>
+                        </div>
+                      </>
+                    );
+                  })()}
                 </div>
 
-                {/* Score & Meter */}
-                <div className="mt-6 space-y-2">
-                  <div className="flex justify-between items-end text-xs font-semibold">
-                    <span className="opacity-80">Spam Probability</span>
-                    <span className="text-sm font-bold">{(scanResult.spam_score * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="w-full h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
-                    <motion.div
-                      className={`h-full shadow-glow ${currentResultMeta.barColor}`}
-                      initial={{ width: 0 }}
-                      animate={{ width: `${scanResult.spam_score * 100}%` }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Recommendation Card */}
-              <div className={`p-4 rounded-xl border flex gap-3.5 items-start ${currentResultMeta.recoCard.style}`}>
-                <div className="p-2.5 rounded-lg border border-current bg-white/10 shrink-0">
-                  <currentResultMeta.recoCard.icon className="w-5 h-5" />
-                </div>
-                <div className="space-y-1">
-                  <h4 className="font-bold text-sm leading-none flex items-center gap-1.5">
-                    {currentResultMeta.recoCard.title}
-                  </h4>
-                  <p className="text-xs opacity-85 leading-normal">
-                    {currentResultMeta.recoCard.desc}
-                  </p>
-                </div>
-              </div>
-
-              {/* Security Metrics Dashboard Grid */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Threat Level</span>
-                  <div className="flex items-center gap-1.5 font-bold text-sm">
-                    <span
-                      className={`w-2.5 h-2.5 rounded-full ${
-                        currentResultMeta.riskLevel === "High"
-                          ? "bg-destructive animate-pulse"
-                          : currentResultMeta.riskLevel === "Medium"
-                          ? "bg-amber-500"
-                          : "bg-emerald-500"
-                      }`}
-                    />
-                    <span
-                      className={
-                        currentResultMeta.riskLevel === "High"
-                          ? "text-destructive"
-                          : currentResultMeta.riskLevel === "Medium"
-                          ? "text-amber-500"
-                          : "text-emerald-500"
-                      }
-                    >
-                      {currentResultMeta.riskLevel} Risk
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Model Confidence</span>
-                  <div className="font-bold text-sm">{(scanResult.confidence * 100).toFixed(1)}%</div>
-                </div>
-
-                <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Processing Time</span>
-                  <div className="font-bold text-sm flex items-center gap-1.5">
-                    <Clock className="w-4 h-4 text-muted-foreground" />
-                    <span>{scanResult.processing_time_ms} ms</span>
-                  </div>
-                </div>
-
-                <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Backend Status</span>
-                  <div className="font-bold text-xs flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
-                    <span className="truncate">
-                      {devMode ? "127.0.0.1:8000" : "FastAPI Healthy"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Three Independent Metrics Grid Card */}
-              <div className="p-5 rounded-2xl glass-panel border space-y-4">
-                <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground border-b border-border/5 pb-2">
-                  Security Diagnostics summary
-                </h4>
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
-                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Spam Score</span>
-                    <span className="text-base font-extrabold">{scanResult.spam_score.toFixed(3)}</span>
-                  </div>
-                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
-                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Spam Prob.</span>
-                    <span className="text-base font-extrabold">{(scanResult.spam_score * 100).toFixed(1)}%</span>
-                  </div>
-                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
-                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Confidence</span>
-                    <span className="text-base font-extrabold">{(scanResult.confidence * 100).toFixed(1)}%</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Threat Explanation details */}
-              <div className="p-5 rounded-2xl glass-panel border space-y-4">
-                <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground border-b border-border/5 pb-2">
-                  Threat Explanation details
-                </h4>
-
-                {/* Detected Keywords */}
-                {scanResult.suspicious_keywords.length > 0 ? (
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-bold text-muted-foreground">Detected suspicious keywords:</span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {scanResult.suspicious_keywords.map((word, idx) => (
-                        <span key={idx} className="px-2 py-0.5 text-[10px] font-bold rounded bg-destructive/10 text-destructive border border-destructive/20">
-                          {word}
-                        </span>
-                      ))}
+                {/* Threat Summary Content */}
+                <div className="flex-1 space-y-3 w-full">
+                  <div className="flex flex-wrap gap-2 items-center justify-between">
+                    <div>
+                      <h4 className="text-base font-extrabold tracking-tight">Executive Threat Summary</h4>
+                      <p className="text-xs text-muted-foreground">Dynamic vulnerability assessment and risk telemetry.</p>
                     </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed mt-1">
-                      These suspicious keywords were identified in the email copy. Terms like {scanResult.suspicious_keywords.slice(0, 3).map(w => `"${w}"`).join(", ")} frequently appear in promotional or phishing scripts, which highly contributed to this classification.
-                    </p>
+                    {scanResult.threat_summary && (
+                      <span className={`px-2.5 py-1 rounded-md text-[10px] font-bold border uppercase tracking-wider ${
+                        scanResult.threat_summary.severity === "Critical"
+                          ? "bg-red-600/10 text-red-600 border-red-600/25 dark:bg-destructive/10 dark:text-destructive dark:border-destructive/25"
+                          : scanResult.threat_summary.severity === "High"
+                          ? "bg-orange-500/10 text-orange-500 border-orange-500/25"
+                          : scanResult.threat_summary.severity === "Medium"
+                          ? "bg-amber-500/10 text-amber-500 border-amber-500/25"
+                          : "bg-emerald-500/10 text-emerald-500 border-emerald-500/25"
+                      }`}>
+                        {scanResult.threat_summary.severity} Severity
+                      </span>
+                    )}
                   </div>
-                ) : (
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-muted-foreground">Suspicious Vocabulary Flags:</span>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      No suspicious keywords were detected. The classifier found no statistically significant spam indicators.
-                    </p>
-                  </div>
-                )}
+                  {scanResult.threat_summary && (
+                    <>
+                      <div className="grid grid-cols-2 gap-3 text-xs pt-1 border-t border-border/5">
+                        <div>
+                          <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Attack Type</span>
+                          <span className="font-bold text-foreground">{scanResult.threat_summary.attack_type}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Impersonated Brand</span>
+                          <span className="font-bold text-foreground">{scanResult.threat_summary.brand_impersonated}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Primary Target</span>
+                          <span className="font-bold text-foreground">{scanResult.threat_summary.primary_target}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground block text-[10px] uppercase font-semibold">Confidence Level</span>
+                          <span className="font-bold text-foreground">{scanResult.threat_summary.confidence_level}</span>
+                        </div>
+                      </div>
+                      {scanResult.threat_summary.executive_summary && (
+                        <div className="text-xs border-t border-border/5 pt-3 text-muted-foreground leading-relaxed whitespace-pre-line">
+                          {scanResult.threat_summary.executive_summary}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
 
-                {/* Bullet Reasons */}
-                {scanResult.reasons.length > 0 && (
-                  <div className="space-y-2 pt-2 border-t border-border/5">
-                    <span className="text-[10px] font-bold text-muted-foreground">Classification Justifications:</span>
-                    <ul className="space-y-1.5 text-xs">
-                      {scanResult.reasons.map((reason, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
-                          <span className="text-muted-foreground">{reason}</span>
-                        </li>
+              {/* Recommended Actions Card */}
+              {scanResult.recommended_actions && (
+                <div className={`p-4 rounded-xl border flex gap-3.5 items-start ${
+                  scanResult.prediction === "Spam"
+                    ? "bg-red-600/5 border-red-600/20 text-red-600 dark:bg-destructive/5 dark:border-destructive/20 dark:text-destructive-foreground"
+                    : scanResult.spam_score >= 0.35
+                    ? "bg-amber-500/5 border-amber-500/20 text-amber-600 dark:text-amber-400"
+                    : "bg-emerald-500/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                }`}>
+                  <div className="p-2.5 rounded-lg border border-current bg-white/10 shrink-0">
+                    {scanResult.prediction === "Spam" ? (
+                      <ShieldX className="w-5 h-5" />
+                    ) : scanResult.spam_score >= 0.35 ? (
+                      <AlertTriangle className="w-5 h-5" />
+                    ) : (
+                      <ShieldCheck className="w-5 h-5" />
+                    )}
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm leading-none flex items-center gap-1.5">
+                      Recommended Action: {scanResult.recommended_actions[0]}
+                    </h4>
+                    <ul className="text-xs opacity-90 list-disc pl-4 pt-1 space-y-0.5 leading-normal">
+                      {scanResult.recommended_actions.slice(1).map((act, i) => (
+                        <li key={i}>{act}</li>
                       ))}
                     </ul>
                   </div>
-                )}
+                </div>
+              )}
+
+              {/* Brand Intelligence Card */}
+              {scanResult.brand_detection && scanResult.brand_detection.brand !== "None" && (
+                <div className={`p-4 rounded-xl border flex gap-3.5 items-start ${
+                  scanResult.brand_detection.impersonation === "Likely"
+                    ? "bg-red-600/5 border-red-600/20 text-red-600 dark:bg-destructive/5 dark:border-destructive/20 dark:text-destructive-foreground"
+                    : "bg-emerald-500/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400"
+                }`}>
+                  <div className="p-2.5 rounded-lg border border-current bg-white/10 shrink-0">
+                    <Award className="w-5 h-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-bold text-sm leading-none flex items-center gap-1.5">
+                      Brand Intelligence Analysis
+                    </h4>
+                    <p className="text-xs mt-1">
+                      Detected reference to <span className="font-bold uppercase text-foreground">{scanResult.brand_detection.brand}</span> in:{" "}
+                      <span className="font-semibold text-foreground/80">{scanResult.brand_detection.detected_in.join(", ")}</span>.
+                    </p>
+                    <p className="text-xs font-semibold mt-1">
+                      Verification Status:{" "}
+                      <span className={scanResult.brand_detection.impersonation === "Official" ? "text-emerald-500" : "text-destructive font-extrabold"}>
+                        {scanResult.brand_detection.impersonation === "Official" ? "Official Verified Domain" : "SUSPICIOUS IMPERSONATION ALERT"}
+                      </span>{" "}
+                      ({scanResult.brand_detection.confidence}% Match confidence)
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Indicators of Compromise (IOC) Summary Grid */}
+              <div className="space-y-2">
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Indicators of Compromise (IOCs)</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {(() => {
+                    const iocs = scanResult.ioc_summary ?? {
+                      "URLs Found": 0,
+                      "Domains": 0,
+                      "Email Addresses": 0,
+                      "Phone Numbers": 0,
+                      "Attachments": 0,
+                      "IP Addresses": 0,
+                      "Shortened URLs": 0,
+                      "Cloud Links": 0,
+                      "Forms Detected": 0
+                    };
+                    const iocConfig = [
+                      { label: "URLs Found", value: iocs["URLs Found"] ?? 0, icon: LinkIcon },
+                      { label: "Domains", value: iocs["Domains"] ?? 0, icon: Globe },
+                      { label: "Email Addresses", value: iocs["Email Addresses"] ?? 0, icon: Mail },
+                      { label: "Phone Numbers", value: iocs["Phone Numbers"] ?? 0, icon: UserCheck },
+                      { label: "Attachments", value: iocs["Attachments"] ?? 0, icon: FileText },
+                      { label: "IP Addresses", value: iocs["IP Addresses"] ?? 0, icon: Activity },
+                      { label: "Shortened URLs", value: iocs["Shortened URLs"] ?? 0, icon: LinkIcon },
+                      { label: "Cloud Links", value: iocs["Cloud Links"] ?? 0, icon: Globe },
+                      { label: "Forms Detected", value: iocs["Forms Detected"] ?? 0, icon: Clipboard }
+                    ];
+                    return iocConfig.map((item, idx) => (
+                      <div key={idx} className="p-3.5 rounded-xl glass-panel border flex items-center gap-3">
+                        <div className="p-2 rounded-lg bg-muted/50 border border-border/5 text-muted-foreground shrink-0">
+                          <item.icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className="text-[10px] font-semibold text-muted-foreground block leading-none mb-1">{item.label}</span>
+                          <span className="text-sm font-extrabold">{item.value}</span>
+                        </div>
+                      </div>
+                    ));
+                  })()}
+                </div>
               </div>
 
-              {/* Model Information Card */}
-              <div className="p-4 rounded-xl glass-panel border flex items-start gap-3 text-xs">
-                <div className="p-2 rounded-lg bg-primary/10 text-primary border border-primary/20 shrink-0">
-                  <Cpu className="w-4.5 h-4.5" />
+              {/* Threat Categories Badges */}
+              {scanResult.prediction === "Spam" && scanResult.threat_categories && Object.keys(scanResult.threat_categories).length > 0 && (
+                <div className="p-5 rounded-2xl glass-panel border space-y-3">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                    Threat Indicators & Signatures
+                  </h4>
+                  <div className="space-y-3">
+                    {Object.entries(scanResult.threat_categories).map(([cat, keywords], idx) => (
+                      <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-2 text-xs">
+                        <span className="font-bold text-muted-foreground w-36 shrink-0">{cat}:</span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(keywords as string[]).map((kw, i) => (
+                            <span key={i} className="px-2 py-0.5 rounded text-[10px] font-semibold bg-red-600/10 text-red-600 border border-red-600/20 dark:bg-destructive/10 dark:text-destructive dark:border-destructive/20">
+                              {kw}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <div className="space-y-1 flex-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Model Parameters</span>
-                    <span className="text-primary font-bold">Inference active</span>
+              )}
+
+              {/* Psychological Techniques */}
+              {scanResult.prediction === "Spam" && scanResult.social_engineering && scanResult.social_engineering.length > 0 && (
+                <div className="p-5 rounded-2xl glass-panel border space-y-3">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                    Psychological Social Engineering Tactics
+                  </h4>
+                  <div className="space-y-3">
+                    {scanResult.social_engineering.map((tech, idx) => {
+                      let TechIcon = HelpCircle;
+                      if (tech === "Urgency") TechIcon = Flame;
+                      else if (tech === "Fear") TechIcon = ShieldAlert;
+                      else if (tech === "Authority") TechIcon = Award;
+                      else if (tech === "Reward") TechIcon = Gift;
+                      else if (tech === "Trust") TechIcon = UserCheck;
+                      else if (tech === "Compliance") TechIcon = Clipboard;
+                      
+                      const evidence = scanResult.social_engineering_evidence?.[tech];
+                      
+                      return (
+                        <div key={idx} className="space-y-1.5 p-3 rounded-xl bg-muted/10 border border-border/5">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground">
+                            <TechIcon className="w-4 h-4 text-primary" />
+                            <span>{tech} Tactic Detected</span>
+                          </div>
+                          {evidence ? (
+                            <blockquote className="pl-3 border-l-2 border-primary/40 text-xs italic text-muted-foreground leading-relaxed">
+                              "{evidence}"
+                            </blockquote>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">Contextual presence identified in the payload.</p>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                  <div className="grid grid-cols-2 gap-y-1 text-muted-foreground text-[11px] pt-1">
-                    <div>Classifier:</div>
-                    <div className="text-foreground font-semibold text-right">TF-IDF + Logistic Regression</div>
-                    <div>Version:</div>
-                    <div className="text-foreground font-semibold text-right">1.0.0</div>
-                    <div>Decision Threshold:</div>
-                    <div className="text-foreground font-semibold text-right">{modelThreshold.toFixed(2)}</div>
+                </div>
+              )}
+
+              {/* Risk Score Breakdown */}
+              {scanResult.prediction === "Spam" && scanResult.risk_breakdown && scanResult.risk_breakdown.length > 0 && (
+                <div className="p-5 rounded-2xl glass-panel border space-y-3.5">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                    Risk Assessment Factor Breakdown
+                  </h4>
+                  <div className="space-y-2.5">
+                    {scanResult.risk_breakdown.map((item, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex justify-between items-center text-xs font-semibold">
+                          <span className="text-muted-foreground">{item.name}</span>
+                          <span className="font-bold">+{item.value}%</span>
+                        </div>
+                        <div className="w-full h-1.5 rounded-full bg-muted/40 overflow-hidden">
+                          <motion.div
+                            className="h-full bg-red-600 dark:bg-destructive"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${item.value}%` }}
+                            transition={{ duration: 0.8 }}
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
+                </div>
+              )}
+
+              {/* Safe Email Analysis Details */}
+              {scanResult.prediction === "Safe" && scanResult.safe_email_explanation && scanResult.safe_email_explanation.length > 0 && (
+                <div className="p-5 rounded-2xl glass-panel border space-y-3">
+                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                    Passive Security Checks & Safe Diagnostics
+                  </h4>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                    {scanResult.safe_email_explanation.map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+                        <span className="text-muted-foreground">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Threat Narrative & Confidence Explanation */}
+              <div className="p-5 rounded-2xl glass-panel border space-y-3">
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                  Threat Logic Narrative
+                </h4>
+                <div className="space-y-3 text-xs leading-relaxed">
+                  {scanResult.reasons.map((reason, idx) => (
+                    <p key={idx} className="text-muted-foreground">
+                      {reason}
+                    </p>
+                  ))}
+                  {scanResult.confidence_explanation && (
+                    <div className="p-3.5 rounded-xl bg-muted/20 border border-border/5 mt-2">
+                      <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block mb-1">
+                        Confidence Explanation
+                      </span>
+                      <p className="text-muted-foreground leading-normal">{scanResult.confidence_explanation}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Collapsible Technical Details */}
+              {scanResult.feature_attribution && (
+                <div className="p-5 rounded-2xl glass-panel border space-y-3">
+                  <button
+                    type="button"
+                    onClick={() => setTechDetailsOpen(!techDetailsOpen)}
+                    className="w-full flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2 hover:text-foreground transition-all"
+                  >
+                    <span>Feature Attribution & Technical Details</span>
+                    {techDetailsOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                  
+                  {techDetailsOpen && (
+                    <div className="space-y-4 pt-2 text-xs">
+                      {/* Positive TF-IDF Vocabularies */}
+                      {scanResult.feature_attribution.positive_tfidf && scanResult.feature_attribution.positive_tfidf.length > 0 && (
+                        <div className="space-y-2">
+                          <h5 className="font-bold text-[11px] text-destructive uppercase tracking-wide">Top Word Contributions (TF-IDF)</h5>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="border-b border-border/10 text-muted-foreground text-[10px]">
+                                  <th className="py-1.5 font-semibold">Word</th>
+                                  <th className="py-1.5 font-semibold text-right">Weight Contribution</th>
+                                  <th className="py-1.5 font-semibold pl-4">Explanation</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {scanResult.feature_attribution.positive_tfidf.map((item, i) => (
+                                  <tr key={i} className="border-b border-border/5">
+                                    <td className="py-1.5 font-mono text-foreground font-semibold">{item.feature}</td>
+                                    <td className="py-1.5 text-right text-destructive font-bold">+{item.contribution.toFixed(4)}</td>
+                                    <td className="py-1.5 pl-4 text-muted-foreground">{item.explanation}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Positive Engineered Features */}
+                      {scanResult.feature_attribution.positive_engineered && scanResult.feature_attribution.positive_engineered.length > 0 && (
+                        <div className="space-y-2">
+                          <h5 className="font-bold text-[11px] text-destructive uppercase tracking-wide">Top Engineered Feature Contributions</h5>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="border-b border-border/10 text-muted-foreground text-[10px]">
+                                  <th className="py-1.5 font-semibold">Feature</th>
+                                  <th className="py-1.5 font-semibold text-right">Value</th>
+                                  <th className="py-1.5 font-semibold text-right pl-4">Contribution</th>
+                                  <th className="py-1.5 font-semibold pl-4">Explanation</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {scanResult.feature_attribution.positive_engineered.map((item, i) => (
+                                  <tr key={i} className="border-b border-border/5">
+                                    <td className="py-1.5 font-semibold text-foreground">{item.feature}</td>
+                                    <td className="py-1.5 text-right font-mono">{item.value}</td>
+                                    <td className="py-1.5 text-right text-destructive font-bold pl-4">+{item.contribution.toFixed(4)}</td>
+                                    <td className="py-1.5 pl-4 text-muted-foreground">{item.explanation}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Negative Attribution (Safety indicators) */}
+                      {scanResult.feature_attribution.negative_attribution && scanResult.feature_attribution.negative_attribution.length > 0 && (
+                        <div className="space-y-2">
+                          <h5 className="font-bold text-[11px] text-emerald-500 uppercase tracking-wide">Safety Signals (Negative Attributions)</h5>
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                              <thead>
+                                <tr className="border-b border-border/10 text-muted-foreground text-[10px]">
+                                  <th className="py-1.5 font-semibold">Feature / Word</th>
+                                  <th className="py-1.5 font-semibold text-right">Contribution</th>
+                                  <th className="py-1.5 font-semibold pl-4">Explanation</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {scanResult.feature_attribution.negative_attribution.map((item, i) => (
+                                  <tr key={i} className="border-b border-border/5">
+                                    <td className="py-1.5 font-mono text-emerald-500 font-semibold">{item.feature}</td>
+                                    <td className="py-1.5 text-right text-emerald-500 font-bold">{item.contribution.toFixed(4)}</td>
+                                    <td className="py-1.5 pl-4 text-muted-foreground">{item.explanation}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Threat Processing Timeline */}
+              <div className="p-5 rounded-2xl glass-panel border space-y-4">
+                <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border/5 pb-2">
+                  Threat Detection Processing Pipeline
+                </h4>
+                <div className="relative pl-6 border-l border-border/10 space-y-4 ml-3 pt-1">
+                  {(() => {
+                    const isBrand = scanResult.brand_detection && scanResult.brand_detection.brand !== "None";
+                    const isCred = scanResult.threat_categories && !!scanResult.threat_categories["Credential Theft"];
+                    const isUrgent = scanResult.threat_categories && !!scanResult.threat_categories["Urgency Language"];
+                    
+                    const pipelineSteps = [
+                      { label: "SMTP Payload Received", active: true },
+                      { label: "Brand Impersonation Analyzed", active: true, highlight: isBrand },
+                      { label: "Credential Theft Scanning", active: true, highlight: isCred },
+                      { label: "Urgency Context Evaluation", active: true, highlight: isUrgent },
+                      { label: "Audit Classification Finalized", active: true }
+                    ];
+                    
+                    return pipelineSteps.map((step, idx) => (
+                      <div key={idx} className="relative flex items-center gap-3">
+                        <span className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-[10px] font-bold ${
+                          step.highlight
+                            ? "bg-red-600/10 border-red-600/50 text-red-600 dark:bg-destructive/10 dark:border-destructive/50 dark:text-destructive"
+                            : step.active
+                            ? "bg-primary/10 border-primary/40 text-primary"
+                            : "bg-muted border-border/10 text-muted-foreground opacity-55"
+                        }`}>
+                          {idx + 1}
+                        </span>
+                        <span className={`text-xs font-semibold ${step.active ? "text-foreground" : "text-muted-foreground opacity-55"}`}>
+                          {step.label}
+                        </span>
+                      </div>
+                    ));
+                  })()}
                 </div>
               </div>
             </motion.div>

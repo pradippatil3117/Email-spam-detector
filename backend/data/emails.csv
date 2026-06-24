@@ -1,0 +1,719 @@
+text,label,category
+"Weekly sync scheduled for Monday at 10 AM to discuss Q3 OKR progress and assign owners for next sprint.",0,business_email
+"Thanks for reviewing the design mockups. I have incorporated your feedback on the dashboard layout and typography.",0,business_email
+"Please find attached the revised proposal for the enterprise licensing agreement with Apex Technologies.",0,business_email
+"The engineering team completed the database migration to PostgreSQL 16 last night. All services are stable.",0,business_email
+"Can you review the attached pull request for the authentication refactor? It needs two approvals before merge.",0,business_email
+"I have forwarded the signed NDA to legal. We can begin the vendor evaluation next week.",0,business_email
+"The quarterly business review is scheduled for Thursday at 2 PM in Conference Room B.",0,business_email
+"Following up on our conversation from Tuesday regarding the SLA breach. The root cause analysis is attached.",0,business_email
+"Please submit your expense reports for the Chicago conference by end of this week for reimbursement processing.",0,business_email
+"The new version of the API documentation has been published to the internal developer portal.",0,business_email
+"Could you share the updated project timeline so we can align the resource allocation for next quarter?",0,business_email
+"The security audit findings have been reviewed. We need to patch the three critical vulnerabilities by Friday.",0,business_email
+"Reminder: all managers should complete the annual budget forecast submission by November 15th.",0,business_email
+"The client presentation for Meridian Healthcare is tomorrow at 9 AM. Please review the deck before then.",0,business_email
+"I have scheduled a call with the AWS account team to discuss our reserved instance pricing for 2025.",0,business_email
+"The new brand guidelines have been approved by leadership. Please update all marketing materials accordingly.",0,business_email
+"Our legal team has reviewed the licensing terms. There are two clauses we need to negotiate further.",0,business_email
+"The feature freeze for version 3.4 is tomorrow. All pending tickets must be resolved or deferred by tonight.",0,business_email
+"Please coordinate with the procurement team to finalize the hardware purchase order for the new data center.",0,business_email
+"I have shared the competitive analysis report in the shared drive under the Strategy folder.",0,business_email
+"The product roadmap for H2 has been approved. I will schedule a kickoff call with all stakeholders next week.",0,business_email
+"Our Salesforce integration is now live in production. The sales team can start tracking pipeline activities.",0,business_email
+"Following up on the vendor contract renewal. The deadline is December 1st and we need sign-off from finance.",0,business_email
+"The load testing results for the payment gateway are in. Performance looks good at 5000 concurrent users.",0,business_email
+"Please confirm your availability for the cross-functional planning session on the 18th at 3 PM.",0,business_email
+"The data retention policy update has been approved by the compliance team and takes effect next month.",0,business_email
+"I have completed the technical scoping for the mobile app redesign. The estimate is six weeks.",0,business_email
+"Heads up: the dev environment will be down for maintenance this Saturday from midnight to 6 AM.",0,business_email
+"The customer success team needs a demo environment ready for the Acme Corp pilot starting Monday.",0,business_email
+"Please review and approve the attached purchase order for the cybersecurity training licenses.",0,business_email
+"We are moving forward with the cloud provider switch to Azure. The migration plan is attached for review.",0,business_email
+"The analytics pipeline is now ingesting data from all regional offices. Dashboard should update hourly.",0,business_email
+"I have drafted the terms of service update. Please review section 4 regarding data processing agreements.",0,business_email
+"The UX research findings from last month are ready. I am scheduling a readout session for next Tuesday.",0,business_email
+"Please make sure the disaster recovery documentation is updated before the ISO audit next month.",0,business_email
+"The Jira board has been restructured to align with the new team topology. Please update your sprint tickets.",0,business_email
+"Our Q4 hiring plan has been approved. We are adding three engineers and one product manager.",0,business_email
+"The infrastructure cost for October came in under budget. Detailed breakdown is in the finance report.",0,business_email
+"I need the feature specification document finalized by Wednesday so the design team can start wireframes.",0,business_email
+"The integration with Stripe for payment processing is ready for QA testing in the staging environment.",0,business_email
+"Team call at 4 PM to walk through the post-incident review findings. Please come prepared with your notes.",0,business_email
+"The contract with DataStream Inc. has been executed. Their team will onboard next week.",0,business_email
+"Marketing needs the product feature list by Friday for the upcoming trade show promotional materials.",0,business_email
+"The support ticket volume is up 20% this month. Let us discuss staffing options in tomorrow's ops review.",0,business_email
+"Please coordinate with DevOps to set up the CI/CD pipeline for the new microservices architecture.",0,business_email
+"The pilot program with GreenLeaf Corp went well. They are ready to sign the full contract.",0,business_email
+"I have reviewed the architecture proposal. The event-driven approach makes sense for the scale we need.",0,business_email
+"Our penetration testing vendor has submitted their final report. The remediation plan is due in two weeks.",0,business_email
+"The monthly engineering all-hands is scheduled for the last Friday of this month at noon.",0,business_email
+"Please update the runbook for the payment service to reflect the new failover procedure implemented last week.",0,business_email
+"Good morning team. Today we have the product demo at 2 PM and the retrospective at 4 PM.",0,internal_comms
+"Quick update: the office kitchen will be closed for renovations from Monday through Wednesday next week.",0,internal_comms
+"Reminder that timesheets are due by 5 PM on Friday. Please make sure all hours are correctly logged.",0,internal_comms
+"The all-hands meeting recording has been posted to the internal wiki. Please watch it before our team call.",0,internal_comms
+"Congratulations to Sarah and the platform team for the successful zero-downtime deployment last night.",0,internal_comms
+"Heads up: there will be a network maintenance window this Sunday from 2 AM to 5 AM Pacific time.",0,internal_comms
+"The parking validation system in the office garage has been updated. Please see the instructions from facilities.",0,internal_comms
+"Our Slack workspace is being reorganized. Please check the new channel structure by end of week.",0,internal_comms
+"The Q3 team outing is scheduled for October 12th. Please submit your activity preference by Friday.",0,internal_comms
+"Reminder: the mandatory security training module must be completed by November 30th for all employees.",0,internal_comms
+"The new expense reimbursement portal is live. Please use it for all future submissions starting this month.",0,internal_comms
+"Coffee chat signups for this month are now open. A great way to meet colleagues from other departments.",0,internal_comms
+"The badge system will be upgraded this weekend. Facilities will issue temporary badges on Saturday morning.",0,internal_comms
+"Team lunch is today at noon at The Olive Garden on Fifth Street. Looking forward to seeing everyone there.",0,internal_comms
+"The Zoom subscription tier has been upgraded. All users now have access to breakout rooms and cloud recording.",0,internal_comms
+"Internal audit team will be visiting our department next week. Please ensure all documentation is up to date.",0,internal_comms
+"Reminder: the company employee survey closes this Friday. Please take 10 minutes to share your feedback.",0,internal_comms
+"The new collaboration tool trial starts Monday. Please install the desktop app before then.",0,internal_comms
+"Happy to share that our team was recognized with the Q3 Excellence Award by leadership. Great work everyone.",0,internal_comms
+"The summer work-from-home policy ends on September 1st. Please plan accordingly for office attendance.",0,internal_comms
+"IT will be pushing a mandatory OS update to all laptops tonight. Please save your work before 8 PM.",0,internal_comms
+"The whiteboard in conference room A has been replaced. New one is now digital and syncs with your calendar.",0,internal_comms
+"Please note that the data center access policy has been updated. All visitors must now be pre-registered.",0,internal_comms
+"Reminder: submit your workshop topic proposals for the engineering offsite by this Thursday.",0,internal_comms
+"The Friday afternoon learning sessions resume next week. First up is a talk on observability by the SRE team.",0,internal_comms
+"We have a new onboarding session for the three engineers joining us on Monday. Please welcome them warmly.",0,internal_comms
+"Annual leave balances will be reset on December 31st. Please check your remaining days in the HR portal.",0,internal_comms
+"The internal knowledge base has been migrated to Confluence. All Notion pages have been archived.",0,internal_comms
+"Our team photo session for the company directory is rescheduled to next Thursday at 2 PM in the lobby.",0,internal_comms
+"Reminder that the ISO 27001 recertification audit starts in two weeks. All relevant teams should be prepared.",0,internal_comms
+"Your leave request for December 23rd to January 2nd has been approved. Enjoy the holidays.",0,hr
+"Welcome to the team. Your onboarding schedule for the first week has been sent to your work email.",0,hr
+"Please complete the mandatory benefits enrollment by October 31st to ensure your coverage continues.",0,hr
+"Your performance review meeting is scheduled for next Wednesday at 11 AM with your direct manager.",0,hr
+"The company has updated its remote work policy. Please review the attached document at your earliest convenience.",0,hr
+"Congratulations on your promotion to Senior Software Engineer effective November 1st.",0,hr
+"Please submit your PTO request for the upcoming holiday period through the HR portal.",0,hr
+"The new parental leave policy is now in effect. Full details are available on the HR intranet page.",0,hr
+"Your employment contract renewal has been prepared. Please review and sign it by November 15th.",0,hr
+"All employees must complete the updated code of conduct training by the end of this quarter.",0,hr
+"The company picnic is scheduled for Saturday, August 24th. Families are welcome to join.",0,hr
+"Please update your emergency contact information in the HR system by end of this month.",0,hr
+"Your probationary period has been successfully completed. We look forward to your continued contributions.",0,hr
+"The salary adjustment for your role has been processed and will reflect in your November paycheck.",0,hr
+"The annual health and wellness fair is on October 5th. Biometric screenings are available from 9 AM.",0,hr
+"Please note the office will be closed on November 11th for Veterans Day. Normal operations resume on the 12th.",0,hr
+"Your FMLA paperwork has been received and is under review. You will hear back within five business days.",0,hr
+"New health insurance options are available during the open enrollment period from November 1st to 15th.",0,hr
+"Your tuition reimbursement request for the online certification course has been approved up to the policy limit.",0,hr
+"The quarterly all-staff meeting will be held virtually this Friday at 1 PM. Please add it to your calendar.",0,hr
+"We would like to schedule a 30-minute check-in to discuss your career development goals for next year.",0,hr
+"Your request for a standing desk has been approved and will be delivered to your workstation next Monday.",0,hr
+"The mandatory anti-harassment training must be completed before December 15th. Please check your email for the link.",0,hr
+"Your offboarding paperwork has been prepared. Please stop by HR to return your badge and equipment.",0,hr
+"The employee stock option grant for Q4 has been processed. Please log into the equity portal to review.",0,hr
+"We are pleased to confirm your relocation assistance for your move to the San Francisco office.",0,hr
+"Please submit your receipts for the professional development conference by Friday for reimbursement.",0,hr
+"The holiday schedule for this year has been posted on the company intranet under the HR section.",0,hr
+"Your request to transfer to the London office has been reviewed and approved by leadership.",0,hr
+"Please ensure your direct reports complete their self-evaluations in Workday by end of next week.",0,hr
+"Thank you for contacting our support team. Your ticket number is #84291. We aim to respond within 24 hours.",0,customer_support
+"We have resolved the billing discrepancy on your account. The corrected invoice is attached for your records.",0,customer_support
+"Your refund of $47.50 has been processed and should appear in your account within 3 to 5 business days.",0,customer_support
+"We appreciate your feedback on the recent product update. Our engineering team is reviewing your suggestion.",0,customer_support
+"Your support ticket has been escalated to our senior technical team. A specialist will contact you shortly.",0,customer_support
+"We are happy to confirm that your subscription has been successfully renewed for another 12 months.",0,customer_support
+"Thank you for your patience. The issue with the login page has been resolved. Please try again now.",0,customer_support
+"Your product return request has been approved. Please use the prepaid label attached to ship it back.",0,customer_support
+"We have updated your account preferences as requested. Changes are effective immediately.",0,customer_support
+"We apologize for the service disruption earlier today. Full service has been restored as of 3:42 PM.",0,customer_support
+"Your order has been shipped via FedEx. Tracking number: 7489201847. Estimated delivery is Thursday.",0,customer_support
+"Your account has been unlocked. If you did not request this change please contact our support team directly.",0,customer_support
+"We have received your cancellation request. Your subscription will remain active until the billing cycle ends.",0,customer_support
+"A technician has been scheduled to visit your location on Friday between 2 PM and 4 PM to resolve the issue.",0,customer_support
+"Thank you for verifying your identity. We have updated your security settings as requested.",0,customer_support
+"Your warranty replacement unit has been approved. Shipping details will be sent separately.",0,customer_support
+"We are following up on your survey response. Thank you for the detailed feedback about your experience.",0,customer_support
+"The account merge you requested has been completed. Both accounts are now unified under your primary email.",0,customer_support
+"Your report of a technical issue with the mobile app has been logged and assigned to our development team.",0,customer_support
+"We are glad to confirm that your custom pricing plan is now active on your account.",0,customer_support
+"Please join us for Monday's sprint planning at 9 AM. We will groom the backlog and finalize sprint goals.",0,sprint_planning
+"The sprint retrospective is at 3 PM on Friday. Bring your notes on what went well and what needs improvement.",0,sprint_planning
+"Our current sprint velocity is 42 story points. Let us aim for 45 next sprint given the team is now fully staffed.",0,sprint_planning
+"The backlog grooming session is tomorrow. We need to estimate the six new stories added by the product team.",0,sprint_planning
+"Sprint 23 review is scheduled for Thursday. Each team member should demo their completed features.",0,sprint_planning
+"We need to discuss the tech debt tickets in the backlog. I propose we dedicate 20% of the next sprint to them.",0,sprint_planning
+"The definition of done has been updated to include integration tests. Please review before the next sprint starts.",0,sprint_planning
+"Three tickets from the previous sprint are being carried over. Let us discuss their estimates in planning.",0,sprint_planning
+"The roadmap alignment session is next Monday. Please review the priorities before we finalize the sprint scope.",0,sprint_planning
+"Can we schedule a story mapping session for the new checkout flow before we begin sprint planning?",0,sprint_planning
+"We are planning to split the monolith into three services over the next two sprints. Architecture review needed.",0,sprint_planning
+"The new Jira workflow has been configured to match our updated definition of done and acceptance criteria.",0,sprint_planning
+"Please estimate the API rate limiting story before the planning session. I need a rough complexity assessment.",0,sprint_planning
+"The sprint capacity this iteration is reduced due to two team members being on leave. Adjusting scope accordingly.",0,sprint_planning
+"The team agreed to a spike for the OAuth2 integration. It will take one sprint before we can commit to the story.",0,sprint_planning
+"The Redis caching layer is causing a race condition under high load. I have reproduced it in staging.",0,technical_discussion
+"Can you review the database query in the user service? It is generating a full table scan instead of using the index.",0,technical_discussion
+"I have opened a PR for the WebSocket implementation. The reconnection logic handles up to 10 retries with backoff.",0,technical_discussion
+"The Docker images are being built with unnecessary layers. I will optimize the Dockerfile to reduce build time.",0,technical_discussion
+"We need to discuss the tradeoffs between GraphQL and REST for the new data aggregation layer.",0,technical_discussion
+"The memory leak in the Node.js worker process has been traced to unclosed event listeners in the queue consumer.",0,technical_discussion
+"I have documented the new message queue architecture. Please review before we begin implementation.",0,technical_discussion
+"The Kubernetes pods are being OOMKilled. We need to review our memory limits and request settings.",0,technical_discussion
+"I am proposing we switch the logging library from Winston to Pino for better performance and structured output.",0,technical_discussion
+"The TLS certificate for the API gateway expires in three days. I am renewing it now but please prioritize this.",0,technical_discussion
+"The new CDN configuration reduces our static asset load times by 40%. Pushed to production this morning.",0,technical_discussion
+"I have reviewed the encryption implementation. We need to use AES-256-GCM instead of AES-256-CBC.",0,technical_discussion
+"The service mesh migration to Istio is complete for the payment and identity services. Auth service is next.",0,technical_discussion
+"Our monitoring dashboards have been updated to track the new latency SLOs agreed with the platform team.",0,technical_discussion
+"Please take a look at the failing integration tests. They are related to the recent schema migration.",0,technical_discussion
+"I need to migrate the ML model serving infrastructure to a dedicated GPU cluster. Request submitted to DevOps.",0,technical_discussion
+"The rate limiter middleware has been deployed. It is now enforcing 100 requests per minute per API key.",0,technical_discussion
+"Can you help me understand the discrepancy between the metrics in Prometheus and the ones in our APM tool?",0,technical_discussion
+"The search indexing pipeline is lagging behind. Root cause appears to be the Elasticsearch shard count.",0,technical_discussion
+"The unit test coverage for the billing module is now at 87%. Goal is 90% before the next release.",0,technical_discussion
+"Project update: The data warehouse migration is on track. Phase one is complete and phase two starts Monday.",0,project_update
+"Weekly status update for Project Atlas: UI development is at 70%. Backend APIs are complete and tested.",0,project_update
+"The mobile app redesign project is entering the QA phase. We expect to submit to the App Store in two weeks.",0,project_update
+"The integration with Salesforce is now in UAT. We expect sign-off from the business team by end of week.",0,project_update
+"Milestone 3 of the platform rewrite is complete. We are on schedule for the Q4 go-live date.",0,project_update
+"The customer portal project has hit a blocker. The third-party identity provider API is not ready. Escalating.",0,project_update
+"Project Gemini status: design is finalized. Engineering kickoff is next Monday. Timeline looks achievable.",0,project_update
+"The analytics dashboard project is two days behind schedule due to data pipeline complexity. Adjusting the plan.",0,project_update
+"Phase two of the server infrastructure upgrade is complete. We are now fully on the new hardware.",0,project_update
+"The security hardening initiative is 80% complete. Remaining items are the API gateway WAF rules.",0,project_update
+"We delivered the first beta release to our design partners today. Feedback session is scheduled for Thursday.",0,project_update
+"The localization project for Spanish and French markets is on track for an end of quarter delivery.",0,project_update
+"The reporting module is ready for stakeholder review. I have scheduled a demo for next Tuesday at 2 PM.",0,project_update
+"The machine learning model retraining pipeline is now automated. It triggers weekly on new data.",0,project_update
+"Project Horizon is behind by one week due to resource constraints. Requesting additional engineering support.",0,project_update
+"The legacy billing system has been decommissioned. All transactions are now processed by the new platform.",0,project_update
+"Your invoice #INV-2024-0892 for the amount of $4,250.00 has been received and is being processed.",0,invoice_confirmation
+"Payment of $12,500.00 for the October consulting engagement has been confirmed. Transaction ID: TXN-889421.",0,invoice_confirmation
+"Purchase order PO-2024-1142 has been approved by the finance team. The vendor will be notified to proceed.",0,invoice_confirmation
+"Your subscription renewal for the enterprise plan at $9,999 per year has been processed successfully.",0,invoice_confirmation
+"The vendor invoice from CloudHost Inc. for $3,200 has been reviewed and approved for payment.",0,invoice_confirmation
+"Receipt confirmation: your payment of $750 for the developer conference registration has been processed.",0,invoice_confirmation
+"Invoice #2024-0445 from TechServices Ltd. is due November 15th. Please review and approve for payment.",0,invoice_confirmation
+"The hardware procurement invoice totaling $28,400 has been approved. Delivery is expected within 10 business days.",0,invoice_confirmation
+"Your retainer invoice for legal services covering October has been sent to the accounts payable team.",0,invoice_confirmation
+"The SaaS tool renewal for $6,500 has been auto-processed per the standing purchase order on file.",0,invoice_confirmation
+"We are pleased to announce that James Whitfield has joined us as our new Head of Product starting today.",0,team_announcement
+"A reminder that the company-wide town hall is next Thursday at 11 AM. Submit your questions in advance.",0,team_announcement
+"We are excited to welcome three new members to the engineering team this week. Please help them settle in.",0,team_announcement
+"The company will be implementing a four-day work week pilot program starting next quarter.",0,team_announcement
+"Please welcome Maria Chen as our new VP of Customer Success. She brings 15 years of experience in SaaS.",0,team_announcement
+"We are upgrading to the Business tier of our collaboration suite. New features will be available Monday.",0,team_announcement
+"The office will be closed December 25th through January 1st for the holiday break.",0,team_announcement
+"Our company has achieved SOC 2 Type II certification. This is a significant milestone for our security program.",0,team_announcement
+"Congratulations to the mobile team for being recognized as Team of the Quarter at the company awards.",0,team_announcement
+"We are excited to announce our Series B funding round of $25 million. Thank you to the whole team.",0,team_announcement
+"URGENT: Your Microsoft 365 account password expires in 24 hours. Click here immediately to reset it: http://bit.ly/ms365-reset",1,microsoft_login
+"Action required: Your Office 365 license has been suspended due to a billing issue. Verify your payment details now.",1,microsoft_login
+"Microsoft Security Alert: We detected a sign-in attempt from Russia on your account. Confirm your identity immediately.",1,microsoft_login
+"Your OneDrive storage is 100% full. Upgrade now to avoid losing files: http://microsoftonline-storage.tk/upgrade",1,microsoft_login
+"Important: Your Microsoft Teams account will be deactivated in 48 hours unless you confirm your email address.",1,microsoft_login
+"Microsoft Account Notice: Unusual activity detected. Please verify your account credentials within 12 hours.",1,microsoft_login
+"Your Outlook mailbox has been flagged for suspicious activity. Confirm your identity to restore full access.",1,microsoft_login
+"Microsoft IT Help Desk: You must install the mandatory security patch. Click this link to proceed immediately.",1,microsoft_login
+"Alert: Your Microsoft account has been logged into from an unrecognized device in China. Secure your account now.",1,microsoft_login
+"Your Microsoft 365 subscription is expiring. Renew now at a special rate: http://ms365-renewal.xyz/secure",1,microsoft_login
+"URGENT: Office 365 password reset required. Your password will expire at midnight unless you take action.",1,microsoft_login
+"Microsoft Security Team: Your account has been temporarily suspended. Click here to verify your identity.",1,microsoft_login
+"Important notification from Microsoft: Your account may have been compromised. Update your recovery information now.",1,microsoft_login
+"Your Azure Active Directory account requires immediate revalidation. Failure to comply will result in suspension.",1,microsoft_login
+"Microsoft SharePoint Alert: A document has been shared with you from an external user. Verify to access it.",1,microsoft_login
+"Action required: Complete the Microsoft account security verification within 24 hours to avoid service interruption.",1,microsoft_login
+"NOTICE: Your Microsoft account has been restricted. Log in now to restore access: http://microsoftverify.top/login",1,microsoft_login
+"Google Security Alert: A new sign-in from an unrecognized browser was detected on your Gmail account. Act now.",1,google_login
+"Your Google Drive storage limit has been exceeded. Click here to upgrade your account before your files are deleted.",1,google_login
+"Urgent: Your Gmail account has been suspended due to a policy violation. Click to appeal and restore access.",1,google_login
+"Google Account Warning: Your account is at risk. Verify your phone number immediately to keep your account secure.",1,google_login
+"Your YouTube channel has been flagged for community guideline violations. Review the notice before your account is closed.",1,google_login
+"Google Cloud billing alert: Your payment method on file has failed. Update it now to avoid service termination.",1,google_login
+"Important: Your Google Workspace account will be deactivated in 48 hours unless you confirm your billing information.",1,google_login
+"Google Security Team: We detected that someone tried to access your account. Click here to confirm it was you.",1,google_login
+"Your Google Photos backup has been paused because your storage is full. Upgrade now to resume backup.",1,google_login
+"NOTICE: Your Google account password must be changed immediately. Failure to do so will result in account loss.",1,google_login
+"Google Verification Required: Confirm your identity to continue using your account. Click the link within 24 hours.",1,google_login
+"Your Google Pay account has been restricted pending identity verification. Click here to restore payment access.",1,google_login
+"Google Ads Notice: Your advertising account has been suspended for payment issues. Update your billing information.",1,google_login
+"Critical security update for your Google account. Please verify your two-factor authentication method immediately.",1,google_login
+"Your Google account was accessed from Bulgaria. If this was not you, secure your account now by clicking here.",1,google_login
+"Apple ID Notice: Your Apple account has been locked due to multiple failed sign-in attempts. Verify your identity.",1,apple_id
+"Important: Your iTunes billing information is out of date. Update your payment method to avoid service interruption.",1,apple_id
+"Apple Security Alert: Your Apple ID has been used to sign in to iCloud on an unrecognized Windows PC.",1,apple_id
+"Your iCloud account is nearly full. Purchase additional storage now to continue backing up your device.",1,apple_id
+"URGENT: Your Apple ID has been disabled for security reasons. Click here to unlock your account immediately.",1,apple_id
+"Apple Support: We noticed unauthorized purchases totaling $349 on your App Store account. Verify immediately.",1,apple_id
+"Apple ID Verification Required: Confirm your email address within 24 hours or your account will be terminated.",1,apple_id
+"Your Apple Pay transaction of $899 for an iPhone 15 has been initiated. Cancel if unauthorized: verify now.",1,apple_id
+"NOTICE: Your Apple ID was used to sign into an Android device. If this was not you, click here immediately.",1,apple_id
+"Apple Account Review: Your account requires immediate attention due to unusual payment activity detected.",1,apple_id
+"Important delivery update: Your Amazon package could not be delivered. Update your address to reschedule delivery.",1,amazon_delivery
+"Amazon Order Alert: Your account has been temporarily suspended due to suspicious activity. Verify your identity.",1,amazon_delivery
+"Your Amazon Prime membership could not be renewed. Update your payment method within 24 hours to keep benefits.",1,amazon_delivery
+"Action Required: An unauthorized purchase of $1,299 was made on your Amazon account. Click to dispute the charge.",1,amazon_delivery
+"ALERT: Your Amazon account has been accessed from a new device. Click to confirm this was you.",1,amazon_delivery
+"Amazon Delivery Notification: Your package is held at the warehouse. Confirm your address to proceed.",1,amazon_delivery
+"Your Amazon account password must be reset immediately. Multiple sign-in failures detected from unknown location.",1,amazon_delivery
+"Important: Your Amazon Business account has been flagged for review. Click here to provide verification documents.",1,amazon_delivery
+"Amazon Refund Notice: You are eligible for a $75 refund. Provide your bank details to process the transfer.",1,amazon_delivery
+"Your Amazon Fresh order could not be processed. Update your payment and delivery information to avoid cancellation.",1,amazon_delivery
+"URGENT: Your FedEx shipment is stuck in customs. Pay the $29 clearance fee now to release your package.",1,amazon_delivery
+"DHL Express: Your international package requires customs documentation. Complete the form within 48 hours.",1,amazon_delivery
+"Package delivery attempted: UPS was unable to deliver your shipment. Click to schedule re-delivery: http://ups-redeliver.xyz",1,amazon_delivery
+"Your account has been locked for your security. Verify your credentials to unlock: http://verify-account.tk/unlock",1,credential_theft
+"Security breach detected on your email account. Confirm your password immediately to prevent data loss.",1,credential_theft
+"Your online banking session has expired. Click here to re-authenticate and access your account securely.",1,credential_theft
+"Verify your identity now: We detected unauthorized access to your account from a foreign IP address.",1,credential_theft
+"Your password will expire in 2 hours. Click the link below to update your credentials and maintain access.",1,credential_theft
+"ALERT: Someone has accessed your account from IP 185.234.x.x (Ukraine). Change your password immediately.",1,credential_theft
+"Your login credentials need to be verified due to a system upgrade. Click here to re-enter your information.",1,credential_theft
+"Security notice: Your account access has been restricted. Confirm your identity via the secure link provided.",1,credential_theft
+"Action required: Your account shows signs of unauthorized access. Reset your password within the next hour.",1,credential_theft
+"Important: Your two-factor authentication has been disabled. Click here to re-enable it and secure your account.",1,credential_theft
+"We detected a login from Lagos, Nigeria on your account. Click here immediately to verify or block this access.",1,credential_theft
+"Your account authentication is no longer valid. Please re-enter your credentials to continue: http://secure-auth.xyz",1,credential_theft
+"System maintenance required: All users must re-verify their accounts by logging in through our secure portal.",1,credential_theft
+"Your digital wallet credentials have been compromised. Update them immediately to protect your funds.",1,credential_theft
+"CRITICAL: Your IT department requires you to verify your VPN credentials before tomorrow morning. Click to verify.",1,credential_theft
+"Your session token has been invalidated due to suspicious activity. Log in again to restore your access.",1,credential_theft
+"Account verification required: Your information does not match our records. Update your profile to continue.",1,credential_theft
+"Alert: Multiple failed login attempts detected on your account. Verify your identity now to prevent lockout.",1,credential_theft
+"Your PayPal account has been limited due to unusual activity. Log in to resolve the issue before your account is closed.",1,banking_fraud
+"URGENT: Your Chase bank account has been suspended due to suspicious transactions. Verify your identity now.",1,banking_fraud
+"Bank of America Security Alert: A transfer of $4,500 from your account has been initiated. Cancel if unauthorized.",1,banking_fraud
+"Wells Fargo Notice: Your debit card has been temporarily frozen for security reasons. Call us immediately.",1,banking_fraud
+"Important: Your Citibank account has been flagged for unusual activity. Verify your information to avoid suspension.",1,banking_fraud
+"HSBC Security Notice: We have detected potentially fraudulent access to your account. Verify your identity now.",1,banking_fraud
+"Your credit card ending in 4821 has been used for a $2,200 purchase in Mexico. Dispute the charge immediately.",1,banking_fraud
+"Barclays Account Alert: Your account has been temporarily suspended. Please verify your details within 24 hours.",1,banking_fraud
+"PayPal: We noticed a suspicious payment request from your account. Click here to review and cancel it now.",1,banking_fraud
+"ING Bank: Your account verification is incomplete. Complete it within 48 hours to maintain access.",1,banking_fraud
+"Your bank account routing information must be updated. Failure to update within 24 hours will result in suspension.",1,banking_fraud
+"Deutsche Bank Security: Unusual login attempts detected on your online banking portal. Secure your account now.",1,banking_fraud
+"Nationwide Building Society: Your account has been restricted. Update your security questions to restore access.",1,banking_fraud
+"Wire transfer alert: A $15,000 transfer from your account to an overseas bank has been initiated. Verify now.",1,banking_fraud
+"Your Revolut account has been suspended pending identity verification. Submit your documents within 48 hours.",1,banking_fraud
+"Important tax notice: You are eligible for a tax refund of $3,200 from the IRS. Provide your account details.",1,banking_fraud
+"Your Social Security benefits will be suspended if you do not call 1-800-XXX-XXXX within the next 24 hours.",1,banking_fraud
+"HMRC Notification: You are owed a tax rebate of £840. Click here to claim your refund now.",1,banking_fraud
+"Exclusive Bitcoin investment opportunity: Earn 30% returns monthly with our guaranteed crypto trading algorithm.",1,crypto_scam
+"Your crypto wallet has been compromised. Transfer your Bitcoin to this secure address immediately: 1A2B3C...",1,crypto_scam
+"Congratulations! You have been selected to receive 2.5 Bitcoin as part of our investor promotion program.",1,crypto_scam
+"Elon Musk is doubling all Bitcoin sent to this wallet. Send 0.1 BTC and receive 0.2 BTC back guaranteed.",1,crypto_scam
+"Exclusive NFT launch: Early investors receive a 500% return. Send Ethereum now to reserve your allocation.",1,crypto_scam
+"Your cryptocurrency account has been compromised. Move your assets to our secure vault immediately.",1,crypto_scam
+"Limited spots available: Join our crypto mining pool and earn $500 daily with zero risk or initial investment.",1,crypto_scam
+"URGENT: Your Binance account has been suspended. Verify your identity to withdraw your crypto before the deadline.",1,crypto_scam
+"Investment Alert: Our AI trading bot has generated 800% ROI this month. Start with just $100 of cryptocurrency.",1,crypto_scam
+"Recover lost cryptocurrency: Our blockchain experts have recovered $12,000 in lost Bitcoin. Click to claim.",1,crypto_scam
+"Coinbase Security Notice: Unauthorized access detected on your account. Verify your seed phrase to secure funds.",1,crypto_scam
+"Free Dogecoin giveaway: Send us your wallet address and receive 10,000 DOGE. Limited to first 1000 responders.",1,crypto_scam
+"Your DeFi investment has matured. Withdraw your $8,500 in profits by connecting your wallet to our platform.",1,crypto_scam
+"Guaranteed crypto returns of 15% weekly. Join thousands of investors already earning passive income.",1,crypto_scam
+"Your MetaMask wallet has been flagged for suspicious activity. Verify your recovery phrase to maintain access.",1,crypto_scam
+"Stock market tip: This penny stock will increase 1000% next week. Buy now before the news breaks publicly.",1,investment_scam
+"Guaranteed investment returns of 25% per month. Join our exclusive VIP trading club today.",1,investment_scam
+"Work from home and earn $5,000 per week. No experience needed. Click here to get started immediately.",1,investment_scam
+"Congratulations! You have been selected for our millionaire mentorship program. Only 3 spots remaining.",1,investment_scam
+"Our forex trading signals have a 95% accuracy rate. Subscribe now and start earning from your investments.",1,investment_scam
+"Earn passive income of $3,000 per month by referring friends to our investment platform.",1,investment_scam
+"A Nigerian prince needs your help to transfer $25 million. You will receive 30% commission for your assistance.",1,investment_scam
+"Real estate investment opportunity: 40% annual returns guaranteed. Invest as little as $500 to get started.",1,investment_scam
+"Our AI-powered trading platform has never lost money. Join now and see your investment grow daily.",1,investment_scam
+"Multi-level marketing opportunity: Build your team and earn residual income while you sleep.",1,investment_scam
+"Your OTP for account verification is 847291. Do NOT share this code with anyone. Confirm your account now.",1,fake_otp
+"We are sending you a verification code to complete your identity check. Enter code 392847 on our secure site.",1,fake_otp
+"Your one-time password is 573920. Enter this code to verify your bank account update request.",1,fake_otp
+"Security verification: Your OTP is 248173. Use this to complete the password reset process on our portal.",1,fake_otp
+"Two-factor authentication code: 918374. Enter this at the login screen to verify your account access attempt.",1,fake_otp
+"Your verification code is 674821. Please enter it within 5 minutes to complete your account registration.",1,fake_otp
+"Confirmation code: 382910. Enter this to authorize the transfer of $2,500 from your savings account.",1,fake_otp
+"Your login verification code is 759234. Enter it now to access your financial dashboard and manage your funds.",1,fake_otp
+"OTP required: Enter 847362 to verify your identity and complete the withdrawal of $1,500 from your account.",1,fake_otp
+"Identity verification code: 293847. You have 10 minutes to enter this on our secure verification portal.",1,fake_otp
+"You have won the International Lottery! Claim your prize of $2,500,000 by providing your personal details.",1,lottery
+"Congratulations! You are our lucky winner for this month. Collect your $500,000 prize now.",1,lottery
+"Your phone number has been selected in our global sweepstakes. Claim your $1,000 gift card today.",1,lottery
+"WINNER ALERT: The lottery commission has verified your email as a prize winner. Claim $750,000 now.",1,lottery
+"You have been randomly selected to receive a $100,000 check. Provide your banking details to process delivery.",1,lottery
+"Final notice: Your unclaimed prize of $250,000 will expire if you do not respond within 24 hours.",1,lottery
+"Email Address Prize: Your email has won the global email draw for $850,000. Respond to claim.",1,lottery
+"Powerball Lottery Notification: You are a secondary prize winner of $50,000. Contact the claims office.",1,lottery
+"International prize notification: You have won a luxury vacation package worth $15,000. Claim immediately.",1,lottery
+"Your registration has won you a cash prize of $5,000 in our annual grand sweepstakes.",1,lottery
+"You are eligible for a refund of $823 from your previous internet service provider. Provide banking details.",1,refund_scam
+"Medicare overpayment: You are owed $1,400 in benefit adjustments. Click here to claim your money.",1,refund_scam
+"Your insurance company owes you $2,100 in unclaimed refunds from 2022. Click to start your claim.",1,refund_scam
+"PPI refund claim: You may be owed thousands in payment protection insurance refunds. Check now for free.",1,refund_scam
+"Tax refund notification: The IRS has processed your refund of $2,847. Provide your debit card to receive funds.",1,refund_scam
+"Overpayment notice: You overpaid on your utility bills. Reclaim $380 by clicking the link below.",1,refund_scam
+"Student loan forgiveness: You qualify for $20,000 in loan cancellation. Apply before the deadline today.",1,refund_scam
+"Your energy provider owes you a rebate of $450. Claim within 48 hours before the offer expires.",1,refund_scam
+"Unclaimed government stimulus: $1,400 designated for your household remains unclaimed. Access it now.",1,refund_scam
+"Bank settlement: You qualify for $3,200 as part of the class action settlement against major banks.",1,refund_scam
+"Attention finance department: Please process the attached invoice for $18,400 for consulting services rendered.",1,invoice_fraud
+"Revised payment details: Our bank account has changed. Please update your records and resend the payment.",1,invoice_fraud
+"Urgent invoice correction: The payment for project #4421 needs to be redirected to our new account immediately.",1,invoice_fraud
+"Invoice #89234 is overdue. To avoid late fees and legal action, please process the payment by end of day.",1,invoice_fraud
+"Payment required: Your supplier has issued a final demand for $7,800. Process within 24 hours to avoid penalties.",1,invoice_fraud
+"CFO request: Please process the wire transfer of $45,000 to our new overseas vendor account immediately.",1,invoice_fraud
+"Vendor update: Our payment details have changed. Future invoices should be paid to the new account listed below.",1,invoice_fraud
+"Billing dispute: The payment for $12,500 is overdue. Your account will be sent to collections if not settled.",1,invoice_fraud
+"Accounts payable: The CEO has approved an urgent payment of $78,000 to the acquisition target. Wire immediately.",1,invoice_fraud
+"Final warning: Invoice #INV-2024-5593 for $3,200 is 90 days overdue. Legal proceedings will begin Friday.",1,invoice_fraud
+"HR Payroll Update: Please verify your payroll direct deposit details to ensure your next payment is processed.",1,payroll_scam
+"Payroll Department: Your bank account details need to be confirmed for this month's salary disbursement.",1,payroll_scam
+"Action Required: Your payroll information could not be verified. Update your banking details by end of day.",1,payroll_scam
+"Emergency payroll notice: Salaries could not be processed due to an error. Verify your bank account now.",1,payroll_scam
+"Human Resources: We need to confirm your routing and account number for direct deposit. Respond immediately.",1,payroll_scam
+"Your paycheck was returned by your bank. Please update your direct deposit information within 24 hours.",1,payroll_scam
+"Payroll system upgrade: All employees must resubmit their banking information in our new secure portal.",1,payroll_scam
+"Important: Your salary payment is on hold pending verification of your updated bank account details.",1,payroll_scam
+"Flash Sale! Up to 70% off on all electronics. Shop now before the sale ends at midnight tonight!",1,promotional_spam
+"You have been selected for an exclusive Black Friday preview sale. Unlock your 40% discount code now.",1,promotional_spam
+"Make $10,000 a month from home. Our proven system has helped 50,000 people achieve financial freedom.",1,promotional_spam
+"Get rid of back pain forever with our revolutionary new supplement. Doctors do not want you to know this.",1,promotional_spam
+"Lose 30 pounds in 30 days. Our miracle weight loss pill is clinically proven and 100% natural.",1,promotional_spam
+"Earn extra cash by completing simple online surveys. Join for free and start earning $25 per survey today.",1,promotional_spam
+"Limited time: Buy two get one free on all premium vitamins and health supplements. Use code HEALTH3.",1,promotional_spam
+"Work from home and earn $3,000 weekly. All you need is a computer and 2 hours per day. Guaranteed income.",1,promotional_spam
+"Unbelievable cruise deals starting at $199 per person. Sail to the Caribbean this winter. Book now!",1,promotional_spam
+"Score huge savings on luxury handbags, watches, and jewelry. Members-only event this weekend only.",1,promotional_spam
+"You have been pre-approved for a $10,000 personal loan with no credit check required. Apply now!",1,promotional_spam
+"Double your social media followers in 24 hours. Our algorithm-powered growth service is 100% guaranteed.",1,promotional_spam
+"Get your free consultation today and learn how to make passive income through our proven real estate system.",1,promotional_spam
+"Biggest sale of the year: 80% off on designer clothes, shoes, and accessories. Shop now before it sells out.",1,promotional_spam
+"Do not miss our exclusive members-only discount. Click here to unlock 50% savings on your next purchase.",1,promotional_spam
+"Looking for tomorrow's sync - can you confirm your availability for our project status discussion? Team is ready.",0,meeting_invite
+"The architecture review for the new payments service is set for Thursday 11 AM. Dial-in details attached.",0,meeting_invite
+"Please block 2 hours on Friday afternoon for the quarterly financial planning session with the CFO.",0,meeting_invite
+"Inviting you to a 30-minute kickoff call to align on the goals and timeline for Project Horizon.",0,meeting_invite
+"Monthly one-on-one rescheduled from Thursday to Friday at 10 AM due to the conflicting board meeting.",0,meeting_invite
+"The design review for the new onboarding flow is confirmed for Tuesday at 3 PM in the Zoom link attached.",0,meeting_invite
+"Please join the customer feedback readout session on Monday at 1 PM. Your input on the UX findings is valuable.",0,meeting_invite
+"Team retrospective is this Friday at 4 PM. Please submit your feedback cards in Miro by Thursday evening.",0,meeting_invite
+"Scheduling a deep dive on the infrastructure costs. Can you join Tuesday at 11 AM for a 45-minute discussion?",0,meeting_invite
+"The product council meeting is at 10 AM. Agenda includes roadmap review and prioritization for next quarter.",0,meeting_invite
+"Vendor evaluation meeting with three shortlisted candidates scheduled over next Wednesday and Thursday.",0,meeting_invite
+"Security threat modeling session for the new API is scheduled for Monday at 2 PM. All engineers should attend.",0,meeting_invite
+"Annual benefits enrollment info session is this Wednesday at noon in the large conference room.",0,meeting_invite
+"Customer success QBR with our top 5 accounts is happening next week. Please confirm attendance by Friday.",0,meeting_invite
+"The hiring panel for the Staff Engineer role will meet Tuesday to review candidates and finalize selections.",0,meeting_invite
+"URGENT: Your Netflix password has been changed. If you did not do this, click here to secure your account.",1,credential_theft
+"Your email account will be deactivated in 3 days unless you verify your information by clicking the link below.",1,credential_theft
+"Security alert: Your linked phone number has been removed from your account. Restore it immediately to stay secure.",1,credential_theft
+"Confirm your subscription renewal: Click here to verify your payment method or your service will be suspended.",1,credential_theft
+"We have frozen your account for security reasons. Submit your documents at this link to restore full access.",1,credential_theft
+"NOTICE: Your employee ID credentials must be recertified by IT Security. Use the attached link to proceed.",1,credential_theft
+"System alert: Your corporate email password has not been updated in 90 days. Reset it now via the link below.",1,credential_theft
+"Your Dropbox account has been accessed from an unrecognized location. Click here to verify and secure it now.",1,credential_theft
+"LinkedIn Security Alert: Your account is being used for suspicious messaging. Verify your credentials now.",1,credential_theft
+"Your Twitter account has been compromised. Re-enter your login details at this secure link to recover it.",1,credential_theft
+"Please review the updated project requirements document I shared in Confluence before tomorrow's planning meeting.",0,business_email
+"The HR team has finalized interview panels for the five open engineering roles. Schedule links sent separately.",0,business_email
+"The new data classification policy requires all sensitive files to be tagged appropriately by end of quarter.",0,business_email
+"The external penetration test results are in. I will summarize the findings in our security review on Monday.",0,business_email
+"Please confirm that the staging environment is ready for the client demo scheduled for this Friday.",0,business_email
+"The analytics team needs access to the raw event logs for the user behavior analysis project.",0,business_email
+"Following up on the vendor selection: we recommend moving forward with the second vendor based on pricing.",0,business_email
+"The legal team has reviewed the SaaS agreement and flagged two clauses for negotiation with the provider.",0,business_email
+"Could you please prepare a five-slide summary of the Q2 results for the board meeting next week?",0,business_email
+"The rollout of the new feature flags system is complete. All teams can now use it for gradual deployments.",0,business_email
+"I have reviewed the user stories for the next sprint and have questions about the acceptance criteria.",0,business_email
+"The third-party audit of our data center has been completed. Results have been shared with the CISO.",0,business_email
+"Please confirm the timeline for the API deprecation so we can notify our integration partners in advance.",0,business_email
+"The engineering lead has approved the architecture decision record. We can proceed with the implementation.",0,business_email
+"The new sales forecasting model shows 18% growth in Q4. Detailed projections are in the attached report.",0,business_email
+"Microsoft Azure subscription alert: Your spending this month has exceeded the set budget threshold by 15 percent.",0,business_email
+"The GitHub Actions workflow for the main branch has been updated to include security scanning and dependency checks.",0,technical_discussion
+"Can you help diagnose why the GraphQL resolver is timing out for queries with nested relationships?",0,technical_discussion
+"I have profiled the payment processing service. The bottleneck is the synchronous call to the fraud detection API.",0,technical_discussion
+"The new feature toggle system is deployed. Engineers can now enable features per tenant without a code deployment.",0,technical_discussion
+"The Elasticsearch cluster is experiencing split-brain issues. We need to review the quorum configuration.",0,technical_discussion
+"I have implemented rate limiting on the public API. Limits are configurable per API key through the admin panel.",0,technical_discussion
+"The new audit logging system captures all write operations to the database with user attribution and timestamps.",0,technical_discussion
+"The Kafka consumer group is lagging by three million messages. We need to add more consumer instances immediately.",0,technical_discussion
+"I have written unit tests for the notification service. Coverage is at 92 percent for the core business logic.",0,technical_discussion
+"The auto-scaling policy for the API gateway has been tuned. It now scales based on both CPU and request latency.",0,technical_discussion
+"Please review the infrastructure-as-code changes for the new VPC peering configuration before we deploy.",0,technical_discussion
+"The on-call runbook for the payment service has been updated with the new escalation path and contact numbers.",0,technical_discussion
+"URGENT: Your PayPal account has been limited. Verify your information within 24 hours to restore full access.",1,banking_fraud
+"Capital One Alert: A payment of $2,700 was attempted from your account in Mexico. Review and dispute now.",1,banking_fraud
+"Synchrony Bank: Your account security has been compromised. Call the number below to verify your identity.",1,banking_fraud
+"Your Zelle payment of $1,500 cannot be completed. Update your banking details to send and receive money.",1,banking_fraud
+"TD Bank Security Team: Your account has been flagged for suspicious international transactions. Respond now.",1,banking_fraud
+"Alliance Financial: Due to failed KYC verification, your account will be closed in 48 hours. Verify now.",1,banking_fraud
+"Standard Chartered: An urgent hold has been placed on your account. Call our security hotline immediately.",1,banking_fraud
+"Your Venmo account has been accessed from a new device in a foreign country. Secure your account now.",1,banking_fraud
+"American Express Fraud Alert: A charge of $5,400 is pending on your card. Dispute it by clicking this link.",1,banking_fraud
+"IRS Final Notice: Failure to pay the outstanding tax liability of $4,200 will result in a federal warrant.",1,banking_fraud
+"Congratulations! You are the winner of $1,250,000 in the UK National Lottery. Provide your details to claim.",1,lottery
+"You have won a brand new iPhone 15 Pro. Complete the survey to claim your prize before the 48-hour deadline.",1,lottery
+"PRIZE NOTIFICATION: Your email was selected in the Holiday Sweepstakes. Claim your $10,000 gift card now.",1,lottery
+"Final attempt: You have an unclaimed prize of $500,000. This is our last attempt to contact you. Reply now.",1,lottery
+"Your phone number has won this week's jackpot of $2,000,000. Contact our claim agent to receive your prize.",1,lottery
+"Your invoice payment is 30 days overdue. Immediate payment of $6,800 required to prevent service suspension.",1,invoice_fraud
+"Finance team alert: Please redirect the next payroll run to the updated bank account details provided below.",1,invoice_fraud
+"Vendor invoice amendment: The payment for $22,500 must be transferred to our new banking account by Friday.",1,invoice_fraud
+"Legal notice: Overdue payment demand for $15,000. Non-payment will result in legal proceedings commencing.",1,invoice_fraud
+"Our records show your company owes $9,350 for services rendered in Q3. Please settle this outstanding balance.",1,invoice_fraud
+"HR Notice: All staff must update their payroll banking information via the new secure employee portal.",1,payroll_scam
+"Payroll correction required: Your last salary payment was incorrect. Submit your updated banking info to fix it.",1,payroll_scam
+"Direct deposit update required: Confirm your bank routing number to receive your next paycheck on time.",1,payroll_scam
+"Special insider trading tip: Buy shares of XYZ Corp before the announcement tomorrow for guaranteed 300% gains.",1,investment_scam
+"Exclusive hedge fund opportunity: Minimum investment $500 with guaranteed 50% annual return. Join now.",1,investment_scam
+"Government grant program: Your business qualifies for $50,000 in free funding. Apply now with no fees.",1,investment_scam
+"Real estate crowdfunding: Invest $1,000 and earn $10,000 returns in six months. Zero risk guaranteed.",1,investment_scam
+"Trading signal subscription: Our expert traders generate 200% monthly returns consistently. Subscribe now.",1,investment_scam
+"Emergency verification: Your enterprise VPN credentials have been flagged. Re-authenticate within 1 hour.",1,credential_theft
+"IT Security Audit: All users must submit their Active Directory credentials for the mandatory security review.",1,credential_theft
+"Your Zoom account password has been changed without your consent. Click here to recover your account now.",1,credential_theft
+"GitHub Security: Your personal access token has been exposed. Revoke and regenerate it immediately.",1,credential_theft
+"Slack workspace warning: Your account shows suspicious automation activity. Verify your identity to continue.",1,credential_theft
+"Your Coinbase wallet has been restricted due to unverified identity. Submit your ID to restore access now.",1,crypto_scam
+"Crypto airdrop: 500 free tokens sent to your wallet. Connect your MetaMask now to claim and withdraw.",1,crypto_scam
+"Bitcoin halving is coming: Our miners guarantee 200% returns on deposits made in the next 48 hours.",1,crypto_scam
+"Binance listing alert: This token will increase 10x in the next 24 hours. Buy now before it is listed.",1,crypto_scam
+"Your crypto staking rewards of $3,400 are ready to withdraw. Verify your wallet address to proceed.",1,crypto_scam
+"The client integration with Salesforce CRM has been completed and is ready for user acceptance testing.",0,project_update
+"Phase three of the office renovation project will begin on November 20th. Teams on floor 5 need to relocate.",0,project_update
+"The documentation for the public API v2 has been published to our developer portal. Partners have been notified.",0,project_update
+"The data privacy impact assessment for the new feature has been completed and cleared by our legal team.",0,project_update
+"Project River milestone 4 is complete. The team delivered ahead of schedule which gives us a two-day buffer.",0,project_update
+"The performance benchmarks for the new recommendation engine show 3x improvement over the previous model.",0,project_update
+"User testing for the onboarding redesign is underway. Initial results are promising with 85% task completion.",0,project_update
+"The infrastructure automation scripts are now in the shared repository. Updated runbooks are linked in the README.",0,project_update
+"Progress report: Thirty-two of forty tasks completed for the regulatory compliance initiative.",0,project_update
+"The partnership integration with Stripe Tax is live in all markets. Configuration guide sent to finance team.",0,project_update
+"Your invoice #2024-1205 for website maintenance services totaling $2,800 is approved for payment.",0,invoice_confirmation
+"The renewal invoice for your annual software license at $14,200 per year has been processed by accounts.",0,invoice_confirmation
+"Payment received: We confirm receipt of $5,500 for the November consulting engagement. Thank you.",0,invoice_confirmation
+"The hardware vendor invoice for $47,000 has been approved and submitted to finance for processing.",0,invoice_confirmation
+"Your professional services invoice for the Q3 project has been reviewed and will be paid in the next batch.",0,invoice_confirmation
+"The monthly SaaS billing for your platform subscription of $3,299 has been processed successfully.",0,invoice_confirmation
+"We are thrilled to announce that our company will be participating in TechCrunch Disrupt next spring.",0,team_announcement
+"Please welcome our new Chief Information Security Officer, Daniel Park, who joins us from Palo Alto Networks.",0,team_announcement
+"The company has been named to the Best Places to Work list for the third consecutive year.",0,team_announcement
+"We have officially opened our new regional office in Singapore. The team is operational as of today.",0,team_announcement
+"Important: All staff should complete the updated data protection training in the next two weeks.",0,team_announcement
+"We have released our annual sustainability report. Read how the company is meeting its carbon neutral goals.",0,team_announcement
+"Employee referral bonus program has been increased to $5,000 for successful engineering hires this quarter.",0,team_announcement
+"The new health and dental plan options for next year are now available on the benefits portal for review.",0,team_announcement
+"Reimbursement for professional certifications has been increased to $3,000 per employee per year.",0,team_announcement
+"We have reached 1,000 enterprise customers. This is a huge milestone for the entire company. Thank you all.",0,team_announcement
+"Your subscription invoice for the project management tool at $299 per month is attached for records.",0,invoice_confirmation
+"The legal retainer invoice for $8,500 from Morrison and Associates has been approved and will be paid Thursday.",0,invoice_confirmation
+"Your Google Workspace renewal invoice for 50 licenses at $14 per user per month has been processed.",0,invoice_confirmation
+"Please verify the amounts on the attached invoice from our data hosting provider before we approve payment.",0,invoice_confirmation
+"Vendor statement: All outstanding invoices from Q3 have been settled. Your account balance is zero.",0,invoice_confirmation
+"Account balance update: Please review your expenses from the recent business trip and submit receipts.",0,business_email
+"The product design sprint for the mobile app begins Monday. All participants should review the brief sent Friday.",0,business_email
+"We received positive feedback from the pilot users. The NPS score for the new interface is 72.",0,business_email
+"The information security team is requesting all teams complete their quarterly access review by Friday.",0,business_email
+"The competitive analysis for the EMEA market expansion is ready. I will present it at Friday's strategy session.",0,business_email
+"URGENT: Your Microsoft Azure resources will be suspended in 24 hours due to non-payment. Update billing now.",1,microsoft_login
+"Microsoft Authenticator: A verification request from Manila, Philippines is pending your approval. Review now.",1,microsoft_login
+"Your Office 365 admin account has been reset. If this was not you, contact Microsoft Security immediately.",1,microsoft_login
+"Microsoft Teams security warning: An external user is attempting to join your private team channel. Block now.",1,microsoft_login
+"FINAL NOTICE: Your Microsoft 365 trial expired. Renew immediately or all your data will be deleted permanently.",1,microsoft_login
+"Your Google Workspace admin privileges have been revoked. Contact your administrator or verify at this link.",1,google_login
+"Google Pay security alert: An unrecognized device is attempting to make a $249 payment. Deny or approve now.",1,google_login
+"Your Gmail account is sending spam to others. Take action now to verify your identity and stop the activity.",1,google_login
+"Google Account Action Required: Confirm your phone number to unlock all Google services on your account.",1,google_login
+"URGENT: Your Google account will be disabled. Complete the identity verification process within the next hour.",1,google_login
+"Apple: Your Apple TV subscription will auto-renew for $149 next week. Cancel if unintended by clicking here.",1,apple_id
+"FaceTime security notice: An unverified device attempted to join your Apple account. Review and block it now.",1,apple_id
+"Apple ID Locked: Too many sign-in failures have locked your account. Verify your identity now to restore it.",1,apple_id
+"App Store Purchase Alert: A subscription of $99 was billed to your Apple ID. Dispute if unauthorized here.",1,apple_id
+"Your iPhone backup failed because your iCloud account has been restricted. Verify now to resume backup.",1,apple_id
+"Amazon Security: We detected you logged in from India. If this was not you secure your account immediately.",1,amazon_delivery
+"Your Amazon order #302-9482847-3928374 could not be delivered. Provide a new delivery address now.",1,amazon_delivery
+"Amazon Prime: Your free trial is ending and we could not charge your card. Update payment to keep benefits.",1,amazon_delivery
+"Return fraud alert: Your Amazon account shows suspicious return activity. Verify your identity to continue.",1,amazon_delivery
+"Your package is at risk of being returned to sender. Pay the $2.99 redelivery fee now to confirm delivery.",1,amazon_delivery
+"Post-delivery survey: Rate your experience with our courier service and claim your $25 Amazon voucher.",1,promotional_spam
+"Your account has earned 50,000 reward points. Redeem them now before they expire at the end of the month.",1,promotional_spam
+"Click here to unsubscribe from future emails or to update your marketing preferences.",1,promotional_spam
+"Spring cleaning sale: Up to 90% off on selected home and garden products. Limited time, shop now.",1,promotional_spam
+"You have been chosen for a free product review. Keep the item worth $200 just for your honest opinion.",1,promotional_spam
+"Make money online without any investment. Join our affiliate program and earn commissions from day one.",1,promotional_spam
+"Final clearance sale ends tonight! Extra 30% off with coupon code FINAL30 at checkout.",1,promotional_spam
+"Win a free iPhone in our social media giveaway. Like, share, and comment to enter. Winner announced Friday.",1,promotional_spam
+"Exclusive member deal: Get six months of premium service free when you upgrade your account today.",1,promotional_spam
+"Hurry! Only 3 spots left in our wealth-building masterclass. Register now before the price doubles.",1,promotional_spam
+"Your health insurance claim for the August visit has been processed and $340 will be paid to the provider.",0,customer_support
+"We have updated your account billing cycle from monthly to annual as requested. You will save 20 percent.",0,customer_support
+"The integration bug you reported in ticket #98374 has been resolved in the latest update v3.2.1.",0,customer_support
+"Our team has reviewed your dispute and issued a full refund of $89.99 which will post in 5 to 7 business days.",0,customer_support
+"We have successfully migrated your data to the new regional data center per your compliance requirements.",0,customer_support
+"Your API rate limit has been increased to 10,000 requests per hour as approved by our enterprise team.",0,customer_support
+"We confirmed receipt of your support documents and the verification process is underway. Expect a response soon.",0,customer_support
+"The feature you requested for bulk export has been prioritized and is scheduled for the next product release.",0,customer_support
+"Your domain transfer to our platform has been completed. DNS propagation typically takes 24 to 48 hours.",0,customer_support
+"We have extended your trial period by 14 days to give your team time to complete the evaluation.",0,customer_support
+"Follow-up: the critical bug you reported has been escalated to our engineering team and is under active review.",0,customer_support
+"Your custom enterprise plan has been activated. Your dedicated account manager will reach out tomorrow.",0,customer_support
+"The service degradation you experienced on November 8th has been investigated. A full post-mortem is attached.",0,customer_support
+"Your team has been granted access to the beta features dashboard. We value your early feedback.",0,customer_support
+"We have updated your organizational settings to reflect the new team structure. Please verify everything looks correct.",0,customer_support
+"Sprint 24 planning is complete. We committed to 48 story points with a focus on the user notifications feature.",0,sprint_planning
+"The technical debt sprint is confirmed for Q4 Week 6. We will address the 12 highest-priority debt items.",0,sprint_planning
+"The product backlog has been reprioritized following the customer advisory board meeting last week.",0,sprint_planning
+"Velocity dropped this sprint due to two unexpected production incidents. Adjusting the next sprint scope.",0,sprint_planning
+"The engineering team proposed splitting the authentication epic into three smaller stories for better tracking.",0,sprint_planning
+"We need to schedule the quarterly roadmap review before the next sprint planning session begins.",0,sprint_planning
+"The accessibility compliance stories have been added to the backlog with high priority for regulatory reasons.",0,sprint_planning
+"Can we review the epic-level estimates for the platform migration? The current breakdown feels too optimistic.",0,sprint_planning
+"The stakeholder-requested features from last month have been added to the backlog with rough estimates.",0,sprint_planning
+"Reminder: please update your ticket statuses in Jira before the sprint review demo tomorrow afternoon.",0,sprint_planning
+"The monitoring alerts for the payments service have been reconfigured to reduce false positives.",0,technical_discussion
+"I need a second pair of eyes on the load balancer configuration before we push to production tonight.",0,technical_discussion
+"The database backup verification job completed successfully. All backups are valid and restorable.",0,technical_discussion
+"The CDN purge scripts have been updated to work with our new multi-region setup.",0,technical_discussion
+"I have investigated the 504 gateway timeout errors. They correlate with the nightly batch job execution window.",0,technical_discussion
+"The service-to-service authentication has been upgraded from basic tokens to mutual TLS certificates.",0,technical_discussion
+"Can you review the proposed changes to the event schema? We need backward compatibility with existing consumers.",0,technical_discussion
+"The scheduled maintenance for the database cluster is confirmed for Sunday 3 AM to 5 AM Pacific time.",0,technical_discussion
+"I have implemented exponential backoff for all external API calls to improve resilience under load.",0,technical_discussion
+"The new caching strategy for the product catalog has reduced database load by 60 percent in staging.",0,technical_discussion
+"Your student loan repayment plan has been modified. Verify your new bank details to continue receiving funds.",1,refund_scam
+"HMRC: Due to a miscalculation you are owed a tax rebate of £1,245. Click here to confirm your bank details.",1,refund_scam
+"Telecommunications regulator: You are eligible for a compensation payment of $380 for overcharging by your ISP.",1,refund_scam
+"Social Security Administration: Your benefits have been recalculated. Provide account details for a $900 deposit.",1,refund_scam
+"Your airline owed you a refund of $450 due to the cancelled flight. Claim it through the official portal.",1,refund_scam
+"Superannuation fund notice: Your unclaimed super balance of $4,200 can be transferred. Verify your details.",1,refund_scam
+"Council tax rebate: You are owed $680 as part of the energy support package. Claim before the deadline.",1,refund_scam
+"Phone company settlement: Join thousands claiming their $200 refund for unauthorized charges. Click to join.",1,refund_scam
+"Please find the attached meeting notes from yesterday's architecture review session. Action items are highlighted.",0,business_email
+"The security team has approved the deployment plan for the zero-trust network access rollout next quarter.",0,business_email
+"The customer satisfaction score for Q3 was 91 percent. The support team deserves recognition for this result.",0,business_email
+"We need to finalize the partnership agreement with TechVentures before their board meeting on the 28th.",0,business_email
+"The performance review cycle begins next week. Please complete your self-assessment in Workday by Friday.",0,business_email
+"The executive team has signed off on the 2025 technology investment plan. Details shared in the attached deck.",0,business_email
+"The new observability platform is fully deployed. Teams can now create custom dashboards for their services.",0,business_email
+"The procurement team has finalized the vendor shortlist for the enterprise data catalog project.",0,business_email
+"Regional sales targets for Q4 have been updated based on the pipeline data. Please review your quota.",0,business_email
+"The design system component library has been updated. Please migrate your components to the latest version.",0,business_email
+"Reminder: please submit your travel receipts for the Austin conference through the Concur portal.",0,business_email
+"The product packaging redesign has been approved. Production will begin with the new design from January.",0,business_email
+"Crypto wallet airdrop: Your wallet is eligible for 1,000 free tokens. Connect it now to claim before midnight.",1,crypto_scam
+"ALERT: Your crypto holdings are at risk. Transfer them to a hardware wallet using this link immediately.",1,crypto_scam
+"NFT whitelist opportunity: Mint for free and sell for $5,000. Join our Discord to get your whitelist spot now.",1,crypto_scam
+"DeFi yield farming: Our smart contract generates 20% weekly returns on your staked assets. Join now.",1,crypto_scam
+"Ethereum merge earnings: Your ETH holdings qualify for a 1.5x multiplier bonus. Claim now before it expires.",1,crypto_scam
+"Crypto arbitrage bot: Our automated trading system exploits price differences to generate guaranteed profits.",1,crypto_scam
+"Your Ledger hardware wallet has been compromised. Move your crypto to the recovery address immediately.",1,crypto_scam
+"Invest in our blockchain startup and receive 10x returns in the first year. Only 50 spots available.",1,crypto_scam
+"Urgent: 0.5 BTC mistakenly sent to your wallet. Return it using this address or face legal action.",1,crypto_scam
+"Our algorithmic crypto fund has returned 3,000% in the past year. Invest as little as $250 to join.",1,crypto_scam
+"Congratulations! As our monthly winner you have earned a $500 Amazon gift card. Click to claim now.",1,promotional_spam
+"Get paid $50 per referral when your friends sign up for our premium subscription service today.",1,promotional_spam
+"DEAL OF THE DAY: 60% off luxury watches. Buy two, get one free with our exclusive online outlet sale.",1,promotional_spam
+"Your exclusive pre-sale access is confirmed. Shop the new collection 24 hours before it goes public.",1,promotional_spam
+"Grow your business 10x with our AI-powered marketing platform. Start your free 30-day trial now.",1,promotional_spam
+"Be your own boss: Start a dropshipping business with zero inventory and earn $10,000 your first month.",1,promotional_spam
+"Limited edition collection drops tomorrow. Join the waitlist now to guarantee your purchase access.",1,promotional_spam
+"Get a free smart home device when you switch to our energy plan. Limited slots. Apply before midnight.",1,promotional_spam
+"We are hosting a webinar on passive income strategies next Tuesday. Register for free and get our bonus guide.",1,promotional_spam
+"Refer a friend and earn $100 for every successful signup. No limit on how many friends you can refer.",1,promotional_spam
+"The sprint 25 planning session is scheduled for 9 AM Monday. Refined stories are in Jira for your review.",0,sprint_planning
+"Our team capacity for the next sprint is 40 story points. Let us prioritize the features with highest business value.",0,sprint_planning
+"The engineering OKRs for Q4 have been finalized. Please review your individual contributions and key results.",0,sprint_planning
+"The feature team would like to discuss the API contract for the new search endpoint before we finalize estimates.",0,sprint_planning
+"Can we schedule a pre-mortem for the payment processing epic before we begin implementation next sprint?",0,sprint_planning
+"The product owner has reprioritized the backlog based on customer feedback from last week's interviews.",0,sprint_planning
+"I have added complexity estimates to all unpointed stories. Please review before our planning session tomorrow.",0,sprint_planning
+"The team retrospective showed that our pull request cycle time is too long. Proposing a PR review SLA.",0,sprint_planning
+"ALERT: Your Microsoft Teams recording has been shared externally. Review and revoke access if unauthorized.",1,microsoft_login
+"Microsoft 365 compliance alert: Your email account is sending unusual volumes of messages. Verify access now.",1,microsoft_login
+"Your OneDrive account was used to download 500GB of files overnight. Secure your account immediately.",1,microsoft_login
+"Microsoft Dynamics alert: An unknown admin user was added to your tenant. Revoke access immediately.",1,microsoft_login
+"EMERGENCY: Your Azure Active Directory has been compromised. All accounts require immediate re-authentication.",1,microsoft_login
+"Google Alert: Your YouTube channel is being transferred to another account. Stop this action immediately.",1,google_login
+"Google Drive: Someone with a suspicious account accessed your shared folder. Revoke permissions immediately.",1,google_login
+"Your Google Meet recording has been accessed by an unrecognized user. Click here to review the access log.",1,google_login
+"Google Cloud: Your billing account has been disabled due to suspicious charges. Review and restore access now.",1,google_login
+"Google Security: Your account recovery phone number was changed. If this was not you, act immediately.",1,google_login
+"Apple Care: Your device has been remotely erased. Log into iCloud to recover your backup immediately.",1,apple_id
+"iTunes billing error: Your payment for $34.99 monthly subscription failed. Update payment or service stops.",1,apple_id
+"Your Apple ID was used to make a purchase from a new country. Deny or allow this purchase within 1 hour.",1,apple_id
+"Urgent: Your Find My iPhone has been disabled by an unauthorized user. Restore it through iCloud now.",1,apple_id
+"Apple Developer account suspension: Your app violates App Store guidelines. Submit an appeal within 24 hours.",1,apple_id
+"Your Amazon account security settings have been modified. If this was not you, recover your account now.",1,amazon_delivery
+"Amazon Gift Card Scam: You have received an Amazon gift card. Scratch and enter the code to redeem.",1,amazon_delivery
+"Amazon Seller Alert: Your selling privileges have been suspended due to policy violations. Appeal immediately.",1,amazon_delivery
+"Your Amazon account shows a large purchase attempt. Click here to verify or deny this transaction now.",1,amazon_delivery
+"Amazon Business account: Your payment method requires verification to process this month's enterprise orders.",1,amazon_delivery
+"FedEx Alert: Your international shipment requires an import duty payment of $48 before release.",1,amazon_delivery
+"Post-mortem review: Here is the summary of last week's production incident along with the corrective actions taken.",0,technical_discussion
+"The search relevance algorithm has been updated. The A/B test shows a 12% improvement in click-through rates.",0,technical_discussion
+"We have completed the SOC2 evidence collection for this year. The auditor access window closes on Friday.",0,technical_discussion
+"The new feature flag system is working well in production. We successfully launched the dark mode rollout.",0,technical_discussion
+"I have reviewed the GDPR data mapping document. There are three systems that still need to be added.",0,technical_discussion
+"The image compression pipeline reduces media upload sizes by 65% without noticeable quality degradation.",0,technical_discussion
+"Emergency patch: A critical vulnerability in the auth library has been discovered. We are patching all services now.",0,technical_discussion
+"The distributed tracing system is now connected to our alerting framework. We can trace errors end-to-end.",0,technical_discussion
+"Your enterprise plan invoice for $24,000 covering the January to December subscription period is attached.",0,invoice_confirmation
+"The IT equipment lease agreement renewal for $18,500 annually has been signed by the CFO and sent to the vendor.",0,invoice_confirmation
+"Payment of $7,200 for the web development project Phase 2 has been processed. Confirmation number: 3849201.",0,invoice_confirmation
+"The catering invoice for the company Q4 offsite event totaling $4,100 has been submitted to accounts payable.",0,invoice_confirmation
+"Please review and approve the attached invoice from our marketing agency for the October campaign work.",0,invoice_confirmation
+"Your annual cyber insurance policy renewal for $11,500 has been processed and the certificate is attached.",0,invoice_confirmation
+"AML training is scheduled for the compliance team on December 5th. Register before the session fills up.",0,hr
+"We are pleased to announce the launch of our flexible work arrangement pilot starting next month.",0,hr
+"Your application for the internal senior engineer role has been reviewed. We would like to schedule an interview.",0,hr
+"The updated travel expense policy is effective January 1st. Please review the new per diem rates.",0,hr
+"New employee directory photos will be taken on December 10th. Please check the sign-up sheet in Slack.",0,hr
+"The 401k contribution matching program has been increased to 6% starting in January. Review your elections.",0,hr
+"Leadership development program applications are open until November 22nd. Speak with your manager to apply.",0,hr
+"The company gym membership subsidy of $50 per month is now available. Enroll through the benefits portal.",0,hr
+"Peer recognition nominations for Q4 are open. Nominate a colleague who has made an exceptional impact.",0,hr
+"The new performance management cycle begins next quarter. Your manager will schedule your goal-setting meeting.",0,hr
+"Password expiration policy is being enforced. All accounts must update their passwords every 90 days.",0,hr
+"The mentorship program matching is complete. You have been paired with a senior leader in a different division.",0,hr
+"New hire orientation for the December cohort will be held virtually on December 2nd from 9 AM to 1 PM.",0,hr
+"Stock vesting schedule for your Q4 grant has been updated in the equity management platform.",0,hr
+"We are offering voluntary severance packages to employees in the restructured business unit. Details to follow.",0,hr
+"Your vacation carryover request for 5 days has been approved. These will roll over to January 1st.",0,hr
+"The employee wellness stipend of $300 per year is available for gym, wellness apps, or mental health services.",0,hr
+"Please review the updated non-disclosure agreement and sign it before your client project begins Monday.",0,hr
+"Congratulations on completing the management training program. Your certificate has been emailed to you.",0,hr
+"The HR team has moved to a new HRIS system. Please log in and verify your personal information by Friday.",0,hr
+"FINAL WARNING: Your mailbox has been flagged for suspicious activity. Access will be revoked in 6 hours.",1,credential_theft
+"Enterprise security notice: Your corporate credentials were used in a failed attempt from an overseas IP.",1,credential_theft
+"IT compliance audit: Submit your system credentials for mandatory recertification by end of business today.",1,credential_theft
+"Your Okta account has been deactivated. Contact IT support using the link below to reactivate your access.",1,credential_theft
+"Multi-factor authentication enrollment required: Click the link to enroll your device before losing access.",1,credential_theft
+"Suspicious login to your corporate email detected. Click here to verify and protect your account now.",1,credential_theft
+"Your JIRA access has been restricted due to repeated failed authentication attempts. Verify identity to unlock.",1,credential_theft
+"GitHub Access Revoked: A security scanner found your personal access token was leaked. Rotate it immediately.",1,credential_theft
+"LDAP password expiry notice: You have 2 hours to update your enterprise password or lose network access.",1,credential_theft
+"Your Salesforce admin credentials are scheduled for reset. Confirm via the link to retain admin privileges.",1,credential_theft
+"Dear valued customer, your bank account has been restricted due to a compliance review. Update your KYC now.",1,banking_fraud
+"Swift fraud alert: A $25,000 international wire transfer has been initiated from your business account.",1,banking_fraud
+"Your debit card has been blocked due to suspicious ATM withdrawals. Verify your card details to unblock it.",1,banking_fraud
+"Santander Security: Your online banking profile has been accessed from a new country. Review this activity.",1,banking_fraud
+"Lloyds Bank: Your mortgage payment has failed. Update your payment information to avoid a missed payment fee.",1,banking_fraud
+"First National Bank: You have been enrolled in a new loan program. Confirm your participation by clicking here.",1,banking_fraud
+"FDIC Notice: Your deposited funds are at risk due to a banking compliance issue. Act within 24 hours.",1,banking_fraud
+"Payment processor alert: Your merchant account has been flagged for chargebacks. Verify now to avoid suspension.",1,banking_fraud
+"Internal memo: The deployment schedule for next week has been confirmed. Friday evening window is approved.",0,internal_comms
+"Just a heads up that the printer on floor 3 is being replaced. New one arrives Thursday morning.",0,internal_comms
+"Please update your contact details in the company directory so the facilities team can reach you when needed.",0,internal_comms
+"The social committee is organizing a charity run in December. Registration opens next Monday for all staff.",0,internal_comms
+"Office supplies request forms must be submitted to the operations team before the 15th of each month.",0,internal_comms
+"The quarterly town hall recording and slide deck are now available on the company intranet.",0,internal_comms
+"Reminder that all teams must submit their technology refresh requests before the budget freeze on December 1st.",0,internal_comms
+"The new internal ticketing system goes live on Monday. Please submit all IT requests through it from then on.",0,internal_comms
+"Company library has been updated with new technical books and online course subscriptions. Browse and request.",0,internal_comms
+"The fire evacuation drill will take place on Thursday at 10 AM. Please follow the instructions from floor wardens.",0,internal_comms
+"The facilities team has updated the hot-desking policy. Please review the new booking system guidelines.",0,internal_comms
+"Lunch delivery program resumes next week. Orders must be placed by 10 AM each day through the intranet portal.",0,internal_comms
+"The monthly sustainability report is now available. We reduced our carbon footprint by 8% this quarter.",0,internal_comms
+"Please welcome the new IT support team members who are joining us from the managed services partner.",0,internal_comms
+"The internal hackathon is next month. Team registration is open. Projects will be judged by the CTO panel.",0,internal_comms
+"Your Microsoft Office subscription has been renewed automatically at the annual rate. No action required.",0,customer_support
+"Thank you for reporting the billing discrepancy. We have corrected the invoice and updated your account.",0,customer_support
+"The issue you raised about slow load times has been identified and a fix will be released in the next patch.",0,customer_support
+"Your premium support plan has been activated. You now have access to the 24/7 priority support hotline.",0,customer_support
+"We have reviewed your feature request and added it to our product backlog for the next quarterly review.",0,customer_support
+"Your data export request has been processed. The download link will expire in 24 hours for security reasons.",0,customer_support
+"The service interruption affecting your region has been resolved. We apologize for any inconvenience caused.",0,customer_support
+"Your API documentation access has been restored following the permission reconfiguration request.",0,customer_support
+"The training session you requested for your team has been scheduled for December 15th at 2 PM online.",0,customer_support
+"We have processed the discount code you requested. It is now active and will apply on your next invoice.",0,customer_support

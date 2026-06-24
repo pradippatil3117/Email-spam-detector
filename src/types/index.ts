@@ -12,14 +12,43 @@ export interface UserProfile {
 
 export interface ScanResult {
   prediction: "Spam" | "Safe";
-  confidence: number; // probability between 0 and 1 (or 0 and 100)
-  spam_score: number; // spam probability (0.0 to 1.0)
+  confidence: number;
+  spam_score: number;
   risk_level: "Low" | "Medium" | "High";
   processing_time_ms: number;
   model_version: string;
   algorithm: string;
   suspicious_keywords: string[];
   reasons: string[];
+  threat_summary?: {
+    attack_type: string;
+    severity: string;
+    brand_impersonated: string;
+    primary_target: string;
+    confidence_level: string;
+    executive_summary?: string;
+  };
+  threat_score?: number;
+  threat_categories?: Record<string, string[]>;
+  ioc_summary?: Record<string, number>;
+  domain_analysis?: Record<string, { brand: string; status: string; reason: string }>;
+  brand_detection?: {
+    brand: string;
+    confidence: number;
+    detected_in: string[];
+    impersonation: string;
+  };
+  social_engineering?: string[];
+  social_engineering_evidence?: Record<string, string>;
+  confidence_explanation?: string;
+  recommended_actions?: string[];
+  risk_breakdown?: Array<{ name: string; value: number; reason?: string }>;
+  safe_email_explanation?: string[];
+  feature_attribution?: {
+    positive_tfidf: Array<{ feature: string; value: number; contribution: number; explanation: string }>;
+    positive_engineered: Array<{ feature: string; value: number; contribution: number; explanation: string }>;
+    negative_attribution: Array<{ feature: string; contribution: number; explanation: string }>;
+  };
 }
 
 export interface ModelConfig {
@@ -43,6 +72,35 @@ export interface ScanHistoryItem extends EmailInput {
   processing_time_ms: number;
   suspicious_keywords: string[];
   reasons: string[];
+  threat_summary?: {
+    attack_type: string;
+    severity: string;
+    brand_impersonated: string;
+    primary_target: string;
+    confidence_level: string;
+    executive_summary?: string;
+  };
+  threat_score?: number;
+  threat_categories?: Record<string, string[]>;
+  ioc_summary?: Record<string, number>;
+  domain_analysis?: Record<string, { brand: string; status: string; reason: string }>;
+  brand_detection?: {
+    brand: string;
+    confidence: number;
+    detected_in: string[];
+    impersonation: string;
+  };
+  social_engineering?: string[];
+  social_engineering_evidence?: Record<string, string>;
+  confidence_explanation?: string;
+  recommended_actions?: string[];
+  risk_breakdown?: Array<{ name: string; value: number; reason?: string }>;
+  safe_email_explanation?: string[];
+  feature_attribution?: {
+    positive_tfidf: Array<{ feature: string; value: number; contribution: number; explanation: string }>;
+    positive_engineered: Array<{ feature: string; value: number; contribution: number; explanation: string }>;
+    negative_attribution: Array<{ feature: string; contribution: number; explanation: string }>;
+  };
   userName?: string;
   userEmail?: string;
 }

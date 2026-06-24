@@ -1,0 +1,34 @@
+{
+  "credential_theft": [
+    "verify", "password", "username", "login", "credential", "authenticate",
+    "account suspended", "account locked", "confirm identity", "security alert",
+    "unauthorized access", "unusual activity", "sign in", "reset password",
+    "update credentials", "access restricted", "validate", "re-authenticate",
+    "session expired", "two factor", "2fa", "one time password", "otp"
+  ],
+  "urgency": [
+    "urgent", "immediately", "right now", "today", "expires", "expiring",
+    "last chance", "final notice", "act now", "limited time", "before it's too late",
+    "action required", "response required", "critical", "important notice",
+    "within 24 hours", "within 48 hours", "deadline", "do not delay"
+  ],
+  "financial": [
+    "wire transfer", "bank account", "routing number", "credit card",
+    "billing details", "payment failed", "invoice overdue", "refund",
+    "compensation", "prize money", "lottery", "jackpot", "winner",
+    "million dollars", "cryptocurrency", "bitcoin", "investment return",
+    "guaranteed profit", "risk free", "double your money", "payroll"
+  ],
+  "promotional": [
+    "free", "discount", "sale", "offer", "deal", "coupon", "promo code",
+    "buy now", "shop now", "limited offer", "exclusive deal", "click here",
+    "unsubscribe", "opt out", "special offer", "congratulations", "selected",
+    "chosen", "earn money", "make money", "work from home"
+  ],
+  "fear": [
+    "suspended", "terminated", "deleted", "blocked", "frozen", "compromised",
+    "hacked", "breached", "stolen", "fraudulent", "illegal", "violation",
+    "penalty", "fine", "lawsuit", "legal action", "authorities", "reported",
+    "your account will be closed", "service will be interrupted"
+  ]
+}

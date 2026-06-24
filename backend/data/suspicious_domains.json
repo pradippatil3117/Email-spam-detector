@@ -1,0 +1,14 @@
+{
+  "suspicious_tlds": [".tk", ".xyz", ".top", ".click", ".work", ".live", ".gq", ".ml", ".cf", ".ga"],
+  "url_shorteners": ["bit.ly", "tinyurl.com", "goo.gl", "t.co", "is.gd", "ow.ly", "shorte.st", "adf.ly", "tr.im"],
+  "impersonated_brands": [
+    "microsoft", "google", "apple", "amazon", "paypal", "netflix", "facebook",
+    "twitter", "linkedin", "dropbox", "chase", "wells fargo", "citibank",
+    "bank of america", "hsbc", "barclays", "irs", "fedex", "ups", "dhl"
+  ],
+  "credential_domains": [
+    "secure-login", "account-verify", "signin-update", "password-reset",
+    "verify-account", "security-alert", "account-suspended", "login-confirm",
+    "user-validation", "credential-update", "auth-required", "access-restore"
+  ]
+}

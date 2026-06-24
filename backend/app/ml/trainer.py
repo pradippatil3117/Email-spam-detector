@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 from sklearn.metrics import (
@@ -14,7 +15,9 @@ from sklearn.metrics import (
     precision_score, 
     recall_score, 
     f1_score, 
-    roc_auc_score
+    roc_auc_score,
+    balanced_accuracy_score,
+    matthews_corrcoef
 )
 import joblib
 import os
@@ -27,100 +30,27 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from .preprocessor import TextPreprocessor
+from .preprocessor import TextPreprocessor, FeatureEngineer
 
 def train_model():
-    # --- EXPANDED BALANCED DATASET ---
-    emails_data = {
-        'text': [
-            # --- Legitimate Business Emails (Ham) - Class 0 ---
-            "Weekly sync scheduled for Monday at 10 AM to discuss Q3 targets.",
-            "Thanks for the feedback on the project kickoff slides. I will revise them today.",
-            "Here are the notes from our discussion with the design team.",
-            "Please find the attached invoice for the software subscriptions.",
-            "Can you review this code change? It fixes the API latency issues.",
-            "Let's sync up on the client presentation tomorrow morning.",
-            "The server migration was completed successfully over the weekend.",
-            "Please submit your self-evaluations for the annual review cycle by Friday.",
-            "Let's reschedule the daily standup due to the company all-hands meeting.",
-            "Could you please send me the latest version of the database schema?",
-            "We have approved your request for leave next week. Have a great vacation!",
-            "The marketing team has shared the new branding guidelines for the app.",
-            "Hey, just following up on our conversation from yesterday. Let know if you need help.",
-            "Please check the attached contract. Let's get it signed before Thursday.",
-            "Are you available for a quick call at 2 PM to go over the feedback?",
-            "The bug on the checkout page has been fixed and deployed to staging.",
-            "I've uploaded the performance test results to the shared drive.",
-            "Good morning team, here is the agenda for today's planning session.",
-            "Can you send the PDF report to the finance department?",
-            "Let's finalize the product specifications before starting the sprint.",
-            "Thanks for the update, the implementation looks solid.",
-            "The office will be closed on Friday for the public holiday.",
-            "Please update your project status on the tracking board.",
-            "Our next client demo is scheduled for next Wednesday.",
-            "Let's review the customer feedback logs to identify major complaints.",
-
-            # --- Promotional Emails (Spam) - Class 1 ---
-            "Get 50% off all items today! Limited time offer, buy now!",
-            "Double your traffic in 30 days! Guaranteed SEO services!",
-            "Don't miss our summer clearance sale. Incredible deals inside!",
-            "Earn $500 a day working from home. Register for the webinar now!",
-            "Lowest prices on top quality vitamins and supplements. Order today.",
-            "Claim your free gift card worth $100. Exclusive rewards for you!",
-            "Unsubscribe from this newsletter if you no longer wish to receive updates.",
-            "Get rich quick with our brand new automated trading system!",
-            "You have been selected for a special VIP loyalty discount.",
-            "Special promotion: Buy one, get one free on all courses!",
-            "Looking to improve your credit score? Free consultation today!",
-            "Unbelievable cruise deals! Sail the Caribbean for cheap!",
-            "Get cheap car insurance quotes in seconds. Save money now!",
-            "Increase your sales instantly with our automated lead generation tool.",
-            "Act fast! This exclusive discount code expires in 2 hours.",
-            "Unlock your special pricing on custom business cards.",
-            "Huge savings on luxury watches! Order before stock runs out!",
-            "Learn how to make millions in real estate with zero down payment.",
-            "Get your free trial of the ultimate productivity software.",
-            "Massive discounts on flight bookings for the upcoming holiday season.",
-
-            # --- Phishing & Urgent Action Emails (Spam) - Class 1 ---
-            "Urgent: Your bank account has been locked. Verify your identity immediately.",
-            "Action Required: Update your security questions to avoid suspension.",
-            "Alert: Suspicious login attempt detected on your Netflix account.",
-            "Important: Verify your password immediately by clicking this secure link.",
-            "Your package delivery failed. Please update your address information.",
-            "IRS notification: You are eligible for a tax refund of $450.",
-            "Dear customer, your credit card billing details are invalid. Renew payment.",
-            "Security notice: Someone accessed your email from a new device.",
-            "Immediate response required: Update your work profile password.",
-            "Your cloud storage is full. Click here to upgrade and avoid data loss.",
-            "Verify your email account now to prevent automatic deletion.",
-            "Urgent action: Confirm your bank routing details to receive the wire transfer.",
-            "Your account security has been compromised. Log in to restore access.",
-            "Verify your identity to claim your unclaimed funds from the lottery.",
-            "Your subscription has been canceled due to a billing error. Reactivate now.",
-            "Important security alert from IT department. Click below to install patch.",
-            "Authorize your recent transaction of $1,200 immediately to avoid fees.",
-            "Your utility bill is overdue. Pay immediately to prevent service interruption.",
-            "Confirm your email credentials to access the shared secure document.",
-            "Urgent: Confirm your shipping details for the pending order #92841."
-        ],
-        'label': [
-            # 25 Ham
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            # 20 Promo
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            # 20 Phishing
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-        ]
-    }
+    # --- LOAD DATA FROM CSV ---
+    current_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    data_path = os.path.join(current_dir, "data", "emails.csv")
+    if not os.path.exists(data_path):
+        raise FileNotFoundError(f"Dataset not found at {data_path}")
+    df = pd.read_csv(data_path)
     
-    df = pd.DataFrame(emails_data)
+    # 1. Verify loading & print details
+    print(f"Number of training samples loaded: {len(df)}")
+    print(f"Label distribution:\n{df['label'].value_counts()}")
     
-    # Preprocess text
-    preprocessor = TextPreprocessor()
-    df['cleaned_text'] = df['text'].apply(preprocessor.clean_text)
+    # Construct DataFrame with sender, subject, body, and text columns
+    # emails.csv only has 'text' column, so we default other raw fields.
+    df['sender'] = ""
+    df['subject'] = ""
+    df['body'] = df['text']
     
-    X = df['cleaned_text']
+    X = df[['sender', 'subject', 'body', 'text']]
     y = df['label']
     
     # Stratified Train/Test Split (80/20) to ensure balanced class distributions
@@ -128,18 +58,26 @@ def train_model():
         X, y, test_size=0.20, stratify=y, random_state=42
     )
     
-    # Construct Pipeline
+    # Construct Pipeline with ColumnTransformer (TF-IDF sub-pipeline + FeatureEngineer)
     pipeline = Pipeline([
-        ('tfidf', TfidfVectorizer()),
+        ('features', ColumnTransformer(
+            transformers=[
+                ('tfidf', Pipeline([
+                    ('clean', TextPreprocessor()),
+                    ('vect', TfidfVectorizer())
+                ]), 'text'),
+                ('eng', FeatureEngineer(), ['sender', 'subject', 'body', 'text'])
+            ]
+        )),
         ('clf', LogisticRegression(max_iter=1000, solver='liblinear'))
     ])
     
     # Define Parameter Grid for GridSearchCV
     param_grid = {
-        'tfidf__max_features': [1000, 2000, 5000],
-        'tfidf__ngram_range': [(1, 1), (1, 2)],
-        'tfidf__min_df': [1, 2],
-        'tfidf__max_df': [0.8, 0.9, 1.0],
+        'features__tfidf__vect__max_features': [1000, 2000],
+        'features__tfidf__vect__ngram_range': [(1, 1), (1, 2)],
+        'features__tfidf__vect__min_df': [1, 2],
+        'features__tfidf__vect__max_df': [0.8, 0.9],
         'clf__C': [0.1, 1.0, 10.0],
         'clf__class_weight': [None, 'balanced']
     }
@@ -154,6 +92,18 @@ def train_model():
     best_pipeline = grid_search.best_estimator_
     print("Best Hyperparameters found:")
     print(grid_search.best_params_)
+    
+    # Print metrics on TF-IDF vocabulary and feature engineering
+    features_transformer = best_pipeline.named_steps['features']
+    tfidf_step = features_transformer.named_transformers_['tfidf'].named_steps['vect']
+    vocabulary_size = len(tfidf_step.vocabulary_)
+    print(f"TF-IDF vocabulary size: {vocabulary_size}")
+    
+    engineered_feature_count = 27
+    print(f"Engineered feature count: {engineered_feature_count}")
+    
+    X_train_transformed = best_pipeline.named_steps['features'].transform(X_train)
+    print(f"Combined feature matrix shape: {X_train_transformed.shape}")
     
     # Get spam probabilities on test set
     y_probs = best_pipeline.predict_proba(X_test)[:, 1]
@@ -181,19 +131,63 @@ def train_model():
     recall = float(recall_score(y_test, y_pred, zero_division=0))
     f1 = float(f1_score(y_test, y_pred, zero_division=0))
     roc_auc = float(roc_auc_score(y_test, y_probs))
+    balanced_acc = float(balanced_accuracy_score(y_test, y_pred))
+    mcc = float(matthews_corrcoef(y_test, y_pred))
+    
+    cm = confusion_matrix(y_test, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+    false_positive_rate = float(fp / (fp + tn)) if (fp + tn) > 0 else 0.0
+    false_negative_rate = float(fn / (fn + tp)) if (fn + tp) > 0 else 0.0
     
     print(f"Metrics at optimal threshold ({optimal_threshold:.2f}):")
-    print(f"  Accuracy:  {accuracy:.4f}")
-    print(f"  Precision: {precision:.4f}")
-    print(f"  Recall:    {recall:.4f}")
-    print(f"  F1 Score:  {f1:.4f}")
-    print(f"  ROC-AUC:   {roc_auc:.4f}")
+    print(f"  Accuracy:          {accuracy:.4f}")
+    print(f"  Precision:         {precision:.4f}")
+    print(f"  Recall:            {recall:.4f}")
+    print(f"  F1 Score:          {f1:.4f}")
+    print(f"  ROC-AUC:           {roc_auc:.4f}")
+    print(f"  Balanced Accuracy: {balanced_acc:.4f}")
+    print(f"  MCC:               {mcc:.4f}")
+    print(f"  FPR:               {false_positive_rate:.4f}")
+    print(f"  FNR:               {false_negative_rate:.4f}")
     
     # Ensure trained_models directory exists
-    output_dir = 'trained_models'
+    output_dir = os.path.join(current_dir, 'trained_models')
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
         
+    # Extract feature importances and save feature_importance.csv
+    coefs = best_pipeline.named_steps['clf'].coef_[0]
+    tfidf_feature_names = tfidf_step.get_feature_names_out()
+    
+    engineered_feature_names = [
+        "url_count", "email_count", "exclamation_count", "currency_count", "caps_ratio",
+        "html_tag_count", "form_detection", "javascript_detection", "shortened_count",
+        "suspicious_domain_count", "urgency_words", "credential_words", "financial_words",
+        "promotional_words", "fear_words", "action_verbs_count",
+        "contains_google", "contains_microsoft", "contains_paypal", "contains_amazon",
+        "contains_bank", "contains_security", "contains_login", "contains_verify",
+        "contains_update", "suspicious_tld_sender", "shortener_sender"
+    ]
+    
+    feature_names = list(tfidf_feature_names) + engineered_feature_names
+    
+    df_importance = pd.DataFrame({
+        'feature': feature_names,
+        'coefficient': coefs
+    })
+    df_importance = df_importance.sort_values(by='coefficient', ascending=False)
+    
+    # Save to CSV
+    df_importance.to_csv(os.path.join(output_dir, 'feature_importance.csv'), index=False)
+    print("feature_importance.csv saved successfully.")
+    
+    # Extract top positive & negative features
+    top_pos_df = df_importance.head(10)
+    top_positive_features = dict(zip(top_pos_df['feature'], top_pos_df['coefficient']))
+    
+    top_neg_df = df_importance.tail(10).sort_values(by='coefficient', ascending=True)
+    top_negative_features = dict(zip(top_neg_df['feature'], top_neg_df['coefficient']))
+    
     # 1. Save pipeline
     model_path = os.path.join(output_dir, 'model.pkl')
     joblib.dump(best_pipeline, model_path)
@@ -201,14 +195,25 @@ def train_model():
     # 2. Save model config (model_config.json)
     config_path = os.path.join(output_dir, 'model_config.json')
     model_config = {
-        "model_version": "1.0.0",
+        "model_version": "1.1.0",
+        "algorithm": "Logistic Regression with Feature Engineering",
+        "training_date": str(date.today()),
+        "dataset_size": len(df),
+        "vocabulary_size": vocabulary_size,
+        "engineered_feature_count": engineered_feature_count,
+        "combined_feature_matrix_shape": list(X_train_transformed.shape),
         "threshold": optimal_threshold,
         "accuracy": accuracy,
         "precision": precision,
         "recall": recall,
         "f1_score": f1,
         "roc_auc": roc_auc,
-        "training_date": str(date.today())
+        "balanced_accuracy": balanced_acc,
+        "MCC": mcc,
+        "false_positive_rate": false_positive_rate,
+        "false_negative_rate": false_negative_rate,
+        "top_positive_features": top_positive_features,
+        "top_negative_features": top_negative_features
     }
     with open(config_path, 'w') as f:
         json.dump(model_config, f, indent=2)
@@ -226,7 +231,6 @@ def train_model():
         
     # 5. Generate and save Plots
     # Confusion Matrix
-    cm = confusion_matrix(y_test, y_pred)
     plt.figure(figsize=(6, 5))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['Ham', 'Spam'], yticklabels=['Ham', 'Spam'])
     plt.title(f'Confusion Matrix (Threshold: {optimal_threshold:.2f})')
