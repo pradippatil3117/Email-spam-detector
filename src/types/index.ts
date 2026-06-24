@@ -46,4 +46,29 @@ export interface UserSettings {
   apiBaseUrl: string;
   defaultThreshold: number;
   notificationsEnabled: boolean;
+  
+  // SECTION 2: Application Preferences
+  landingPage: "dashboard" | "scanner" | "history" | "analytics" | "model" | "settings";
+  animationSpeed: "instant" | "fast" | "normal" | "slow";
+  compactMode: boolean;
+  reducedMotion: boolean;
+  dateFormat: "YYYY-MM-DD" | "MM/DD/YYYY" | "DD/MM/YYYY";
+  timeFormat: "12h" | "24h";
+
+  // SECTION 3: Scanner Preferences
+  spamThresholdOverride: number;
+  defaultScanView: "split" | "full" | "simple";
+  autoSaveHistory: boolean;
+  confirmDeleteScan: boolean;
+
+  // SECTION 4: Notifications
+  toastNotifications: boolean;
+  scanCompleteNotification: boolean;
+  errorNotifications: boolean;
+  exportSuccessNotification: boolean;
+
+  // SECTION 5: Developer Options
+  developerMode: boolean;
+  enableDebugInfo: boolean;
+  showResponseInspector: boolean;
 }

@@ -30,7 +30,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 export const HistoryScreen: React.FC = () => {
-  const { isBackendOnline } = useSettings();
+  const { settings, isBackendOnline } = useSettings();
   const [history, setHistory] = useLocalStorage<ScanHistoryItem[]>("email_security_history", []);
 
   // Filter & Search States
@@ -97,6 +97,42 @@ export const HistoryScreen: React.FC = () => {
         recommendation: "Delete or quarantine immediately. High risk threat."
       };
     }
+  };
+
+  const formatDate = (timestamp: string): string => {
+    const d = new Date(timestamp);
+    if (isNaN(d.getTime())) return timestamp;
+    
+    // Format Date
+    let dateStr = "";
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    
+    if (settings.dateFormat === "YYYY-MM-DD") {
+      dateStr = `${yyyy}-${mm}-${dd}`;
+    } else if (settings.dateFormat === "MM/DD/YYYY") {
+      dateStr = `${mm}/${dd}/${yyyy}`;
+    } else {
+      dateStr = `${dd}/${mm}/${yyyy}`;
+    }
+    
+    // Format Time
+    let timeStr = "";
+    if (settings.timeFormat === "24h") {
+      const hh = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      timeStr = `${hh}:${min}`;
+    } else {
+      let hours = d.getHours();
+      const minutes = String(d.getMinutes()).padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      timeStr = `${hours}:${minutes} ${ampm}`;
+    }
+    
+    return `${dateStr} ${timeStr}`;
   };
 
   // Safe parsing helper for date objects
@@ -330,8 +366,27 @@ export const HistoryScreen: React.FC = () => {
 
   // Delete Action implementations
   const triggerDelete = (target: "all" | "selected" | string) => {
-    setDeleteTarget(target);
-    setDeleteConfirmOpen(true);
+    if (settings.confirmDeleteScan) {
+      setDeleteTarget(target);
+      setDeleteConfirmOpen(true);
+    } else {
+      if (target === "all") {
+        setHistory([]);
+        setToast("Clear audit history complete");
+      } else if (target === "selected") {
+        setHistory((prev) => prev.filter((item) => !selectedRows.has(item.id)));
+        setSelectedRows(new Set());
+        setToast(`Deleted ${selectedRows.size} selected audit logs`);
+      } else if (typeof target === "string") {
+        setHistory((prev) => prev.filter((item) => item.id !== target));
+        setSelectedRows((prev) => {
+          const next = new Set(prev);
+          next.delete(target);
+          return next;
+        });
+        setToast("Audit record deleted");
+      }
+    }
   };
 
   const confirmDelete = () => {
@@ -667,11 +722,7 @@ export const HistoryScreen: React.FC = () => {
                               />
                             </td>
                             <td className="p-3 text-muted-foreground whitespace-nowrap">
-                              {new Date(item.timestamp).toLocaleDateString()}{" "}
-                              {new Date(item.timestamp).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit"
-                              })}
+                              {formatDate(item.timestamp)}
                             </td>
                             <td className="p-3 font-semibold truncate max-w-[140px]" title={item.sender}>
                               {item.sender}
@@ -840,7 +891,7 @@ export const HistoryScreen: React.FC = () => {
                   <div className="col-span-5 font-bold truncate">{activeItem.subject}</div>
                   <div className="col-span-1 text-muted-foreground">Logged:</div>
                   <div className="col-span-5 text-muted-foreground">
-                    {new Date(activeItem.timestamp).toLocaleString()}
+                    {formatDate(activeItem.timestamp)}
                   </div>
                 </div>
 

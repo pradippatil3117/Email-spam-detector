@@ -44,7 +44,7 @@ const scanStages = [
 ];
 
 export const ScannerScreen: React.FC = () => {
-  const { isBackendOnline } = useSettings();
+  const { settings, isBackendOnline } = useSettings();
   const [history, setHistory] = useLocalStorage<ScanHistoryItem[]>("email_security_history", getSeedHistory());
   const [scanStatus, setScanStatus] = useState<"idle" | "scanning" | "success" | "error">("idle");
   const [currentStage, setCurrentStage] = useState(0);
@@ -81,6 +81,32 @@ export const ScannerScreen: React.FC = () => {
     resolver: zodResolver(scanSchema),
     mode: "onChange",
   });
+
+  // Populate hidden inputs in simple view
+  useEffect(() => {
+    if (settings.defaultScanView === "simple") {
+      reset({
+        sender: "simple-scanner@aegis-ai.local",
+        subject: "Simple Payload Security Audit",
+        body: ""
+      });
+    }
+  }, [settings.defaultScanView, reset]);
+
+  // Global keyboard shortcut: Ctrl + Enter to submit form
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        const submitBtn = document.getElementById("scanner-submit-btn") as HTMLButtonElement | null;
+        if (submitBtn && !submitBtn.disabled) {
+          submitBtn.click();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleClear = () => {
     reset();
@@ -125,6 +151,16 @@ export const ScannerScreen: React.FC = () => {
       await new Promise((resolve) => setTimeout(resolve, delayTime));
       clearInterval(stageInterval);
 
+      // Respect spamThresholdOverride for prediction and risk level
+      const activeThreshold = settings.spamThresholdOverride;
+      const isSpam = result.spam_score >= activeThreshold;
+      let finalRiskLevel: "Low" | "Medium" | "High" = "Low";
+      if (result.spam_score >= 0.7) {
+        finalRiskLevel = "High";
+      } else if (result.spam_score >= activeThreshold) {
+        finalRiskLevel = "Medium";
+      }
+
       // Save scan to history
       const historyItem: ScanHistoryItem = {
         id: `scan-${Date.now()}`,
@@ -132,17 +168,24 @@ export const ScannerScreen: React.FC = () => {
         sender: data.sender,
         subject: data.subject,
         body: data.body,
-        prediction: result.prediction,
+        prediction: isSpam ? "Spam" : "Safe",
         confidence: result.confidence,
         spam_score: result.spam_score,
-        risk_level: result.risk_level,
+        risk_level: finalRiskLevel,
         processing_time_ms: result.processing_time_ms,
         suspicious_keywords: result.suspicious_keywords,
         reasons: result.reasons,
       };
 
-      setHistory((prev) => [historyItem, ...prev]);
-      setScanResult(result);
+      if (settings.autoSaveHistory) {
+        setHistory((prev) => [historyItem, ...prev]);
+      }
+      
+      setScanResult({
+        ...result,
+        prediction: isSpam ? "Spam" : "Safe",
+        risk_level: finalRiskLevel,
+      });
       setScanStatus("success");
     } catch (error: any) {
       clearInterval(stageInterval);
@@ -163,17 +206,16 @@ export const ScannerScreen: React.FC = () => {
   };
 
   // Determine confidence-aware messaging properties
-  const getConfidenceMessaging = (score: number, prediction: "Spam" | "Safe") => {
-    // Spam Probability levels:
-    // < 30% -> SAFE (Green)
-    // 30% - 60% -> BORDERLINE (Amber)
-    // > 60% -> SPAM (Red)
-    if (score < 0.3) {
+  const getConfidenceMessaging = (score: number) => {
+    const threshold = settings.spamThresholdOverride;
+    const isSpam = score >= threshold;
+
+    if (!isSpam) {
       return {
         status: "SAFE",
         recommendation: "Safe to open.",
         riskLevel: "Low",
-        description: "The classifier found no statistically significant spam indicators.",
+        description: "The classifier found no spam indicators above the configured threshold.",
         badgeColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
         barColor: "bg-emerald-500",
         gradientClass: "from-emerald-500/15 to-emerald-600/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
@@ -181,17 +223,17 @@ export const ScannerScreen: React.FC = () => {
         icon: ShieldCheck,
         recoCard: {
           title: "Safe to Open",
-          desc: "This email has passed all security checks. No threat patterns or suspicious keywords were detected.",
+          desc: "This email has passed all security checks. No threat patterns or suspicious keywords were detected above the threshold.",
           style: "bg-emerald-500/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
           icon: CheckCircle2
         }
       };
-    } else if (score >= 0.3 && score <= 0.6) {
+    } else if (score >= threshold && score < 0.7) {
       return {
         status: "BORDERLINE",
         recommendation: "Manual review recommended.",
         riskLevel: "Medium",
-        description: "This email contains ambiguous language or moderate indicators. Exercise caution.",
+        description: "This email contains moderate indicators near the decision boundary.",
         badgeColor: "text-amber-500 bg-amber-500/10 border-amber-500/20",
         barColor: "bg-amber-500",
         gradientClass: "from-amber-500/15 to-amber-600/5 border-amber-500/20 text-amber-600 dark:text-amber-400",
@@ -225,12 +267,14 @@ export const ScannerScreen: React.FC = () => {
     }
   };
 
-  const currentResultMeta = scanResult ? getConfidenceMessaging(scanResult.spam_score, scanResult.prediction) : null;
+  const currentResultMeta = scanResult ? getConfidenceMessaging(scanResult.spam_score) : null;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-start ${settings.defaultScanView === "full" ? "max-w-4xl mx-auto" : ""}`}>
       {/* LEFT COLUMN: Input Form */}
-      <div className="lg:col-span-6 space-y-6">
+      <div className={`${
+        settings.defaultScanView === "split" ? "lg:col-span-6" : "lg:col-span-12"
+      } space-y-6`}>
         <div className="p-6 rounded-2xl glass-panel border space-y-6">
           <div className="flex items-center justify-between">
             <div>
@@ -253,59 +297,63 @@ export const ScannerScreen: React.FC = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             {/* Sender Email Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="sender" className="text-xs font-semibold text-muted-foreground">
-                Sender Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            {settings.defaultScanView !== "simple" && (
+              <div className="space-y-1.5">
+                <label htmlFor="sender" className="text-xs font-semibold text-muted-foreground">
+                  Sender Email Address
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <input
+                    id="sender"
+                    type="text"
+                    placeholder="e.g. support@paypal-security.com"
+                    aria-label="Sender email address"
+                    {...register("sender")}
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-muted/10 text-sm focus:outline-none focus:ring-2 transition-all ${
+                      errors.sender
+                        ? "border-destructive/40 focus:ring-destructive/20 focus:border-destructive"
+                        : "border-border/10 focus:ring-primary/20 focus:border-primary"
+                    }`}
+                    disabled={scanStatus === "scanning"}
+                  />
+                </div>
+                {errors.sender && (
+                  <p className="text-[10px] text-destructive font-semibold flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 shrink-0" />
+                    <span>{errors.sender.message}</span>
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Subject Input */}
+            {settings.defaultScanView !== "simple" && (
+              <div className="space-y-1.5">
+                <label htmlFor="subject" className="text-xs font-semibold text-muted-foreground">
+                  Email Subject Line
+                </label>
                 <input
-                  id="sender"
+                  id="subject"
                   type="text"
-                  placeholder="e.g. support@paypal-security.com"
-                  aria-label="Sender email address"
-                  {...register("sender")}
-                  className={`w-full pl-10 pr-4 py-2.5 rounded-xl border bg-muted/10 text-sm focus:outline-none focus:ring-2 transition-all ${
-                    errors.sender
+                  placeholder="e.g. Urgent: Verify your password immediately"
+                  aria-label="Email subject line"
+                  {...register("subject")}
+                  className={`w-full px-4 py-2.5 rounded-xl border bg-muted/10 text-sm focus:outline-none focus:ring-2 transition-all ${
+                    errors.subject
                       ? "border-destructive/40 focus:ring-destructive/20 focus:border-destructive"
                       : "border-border/10 focus:ring-primary/20 focus:border-primary"
                   }`}
                   disabled={scanStatus === "scanning"}
                 />
+                {errors.subject && (
+                  <p className="text-[10px] text-destructive font-semibold flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3 shrink-0" />
+                    <span>{errors.subject.message}</span>
+                  </p>
+                )}
               </div>
-              {errors.sender && (
-                <p className="text-[10px] text-destructive font-semibold flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3 shrink-0" />
-                  <span>{errors.sender.message}</span>
-                </p>
-              )}
-            </div>
-
-            {/* Subject Input */}
-            <div className="space-y-1.5">
-              <label htmlFor="subject" className="text-xs font-semibold text-muted-foreground">
-                Email Subject Line
-              </label>
-              <input
-                id="subject"
-                type="text"
-                placeholder="e.g. Urgent: Verify your password immediately"
-                aria-label="Email subject line"
-                {...register("subject")}
-                className={`w-full px-4 py-2.5 rounded-xl border bg-muted/10 text-sm focus:outline-none focus:ring-2 transition-all ${
-                  errors.subject
-                    ? "border-destructive/40 focus:ring-destructive/20 focus:border-destructive"
-                    : "border-border/10 focus:ring-primary/20 focus:border-primary"
-                }`}
-                disabled={scanStatus === "scanning"}
-              />
-              {errors.subject && (
-                <p className="text-[10px] text-destructive font-semibold flex items-center gap-1">
-                  <AlertCircle className="w-3 h-3 shrink-0" />
-                  <span>{errors.subject.message}</span>
-                </p>
-              )}
-            </div>
+            )}
 
             {/* Body Textarea */}
             <div className="space-y-1.5">
@@ -336,6 +384,7 @@ export const ScannerScreen: React.FC = () => {
             {/* Action Buttons */}
             <div className="flex items-center gap-3 pt-2">
               <button
+                id="scanner-submit-btn"
                 type="submit"
                 disabled={scanStatus === "scanning" || !isValid}
                 className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary text-white font-bold hover:bg-opacity-95 shadow-md shadow-primary/10 transition-all disabled:opacity-55 disabled:cursor-not-allowed"
@@ -348,7 +397,7 @@ export const ScannerScreen: React.FC = () => {
                 ) : (
                   <>
                     <Shield className="w-4 h-4" />
-                    <span>Analyze Email</span>
+                    <span>Analyze Email (Ctrl + Enter)</span>
                   </>
                 )}
               </button>
@@ -366,7 +415,7 @@ export const ScannerScreen: React.FC = () => {
       </div>
 
       {/* RIGHT COLUMN: Scenarios & Results */}
-      <div className="lg:col-span-6">
+      <div className={settings.defaultScanView === "split" ? "lg:col-span-6" : "lg:col-span-12"}>
         <AnimatePresence mode="wait">
           {/* SCENARIO 1: Idle Screen */}
           {scanStatus === "idle" && (

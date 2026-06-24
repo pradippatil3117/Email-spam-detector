@@ -7,13 +7,22 @@ import { HistoryScreen } from "./components/HistoryScreen";
 import { AnalyticsScreen } from "./components/AnalyticsScreen";
 import { ModelScreen } from "./components/ModelScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
+import { useSettings } from "./context/SettingsContext";
+
+const LandingRedirect: React.FC = () => {
+  const { settings } = useSettings();
+  if (settings.landingPage && settings.landingPage !== "dashboard") {
+    return <Navigate to={`/${settings.landingPage}`} replace />;
+  }
+  return <DashboardScreen />;
+};
 
 export default function App() {
   return (
     <BrowserRouter>
       <Layout>
         <Routes>
-          <Route path="/" element={<DashboardScreen />} />
+          <Route path="/" element={<LandingRedirect />} />
           <Route path="/scanner" element={<ScannerScreen />} />
           <Route path="/history" element={<HistoryScreen />} />
           <Route path="/analytics" element={<AnalyticsScreen />} />

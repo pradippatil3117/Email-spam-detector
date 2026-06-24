@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSettings } from "../context/SettingsContext";
 import {
   LayoutDashboard,
@@ -23,7 +23,7 @@ import {
   Palette,
   AlertTriangle
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 
 interface NavItem {
   name: string;
@@ -62,10 +62,30 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const [accentDropdownOpen, setAccentDropdownOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem("sidebar_collapsed", JSON.stringify(isCollapsed));
   }, [isCollapsed]);
+
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === ",") {
+        e.preventDefault();
+        navigate("/settings");
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        const searchInput = document.getElementById("global-search-input");
+        if (searchInput) {
+          (searchInput as HTMLInputElement).focus();
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   const handleRefreshHealth = async () => {
     setIsRefreshingHealth(true);
@@ -237,15 +257,15 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             >
               <Menu className="w-5 h-5" />
             </button>
-            {/* Search Placeholder */}
+            {/* Search Input */}
             <div className="relative max-w-xs w-full hidden sm:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
+                id="global-search-input"
                 type="text"
-                placeholder="Search threats, emails..."
-                disabled
+                placeholder="Search threats, emails... (Ctrl + K)"
                 aria-label="Search inputs"
-                className="w-full pl-9 pr-4 py-1.5 rounded-lg border border-border/10 bg-muted/20 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-60 cursor-not-allowed"
+                className="w-full pl-9 pr-4 py-1.5 rounded-lg border border-border/10 bg-muted/20 text-xs focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
               />
             </div>
           </div>
@@ -388,76 +408,86 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             </div>
           </div>
         </header>
-
+ 
         {/* Content body */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 max-w-7xl w-full mx-auto">
-          <AnimatePresence mode="wait">
-            {isBackendOnline === false ? (
-              // Offline Error Panel
-              <motion.div
-                key="offline-panel"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="h-full flex items-center justify-center p-4 md:p-8"
-              >
-                <div className="max-w-md w-full glass-panel border p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden">
-                  {/* Decorative error glow background */}
-                  <div className="absolute -top-12 -left-12 w-24 h-24 bg-destructive/10 rounded-full blur-2xl pointer-events-none" />
-                  <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-warning/10 rounded-full blur-2xl pointer-events-none" />
-
-                  <div className="mx-auto w-16 h-16 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive flex items-center justify-center shadow-lg">
-                    <AlertTriangle className="w-8 h-8 animate-bounce" />
+          <MotionConfig transition={
+            settings.reducedMotion || settings.animationSpeed === "instant"
+              ? { duration: 0 }
+              : settings.animationSpeed === "fast"
+              ? { type: "tween", duration: 0.15 }
+              : settings.animationSpeed === "slow"
+              ? { type: "spring", stiffness: 45, damping: 12 }
+              : undefined
+          }>
+            <AnimatePresence mode="wait">
+              {isBackendOnline === false && location.pathname !== "/settings" ? (
+                // Offline Error Panel
+                <motion.div
+                  key="offline-panel"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="h-full flex items-center justify-center p-4 md:p-8"
+                >
+                  <div className="max-w-md w-full glass-panel border p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden">
+                    {/* Decorative error glow background */}
+                    <div className="absolute -top-12 -left-12 w-24 h-24 bg-destructive/10 rounded-full blur-2xl pointer-events-none" />
+                    <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-warning/10 rounded-full blur-2xl pointer-events-none" />
+  
+                    <div className="mx-auto w-16 h-16 rounded-2xl bg-destructive/10 border border-destructive/20 text-destructive flex items-center justify-center shadow-lg">
+                      <AlertTriangle className="w-8 h-8 animate-bounce" />
+                    </div>
+  
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold tracking-tight">Security Gateway Offline</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">
+                        Aegis cannot communicate with the classification server at <code className="px-1.5 py-0.5 rounded bg-muted text-xs font-semibold">{settings.apiBaseUrl}</code>. Please check your network connection or verify settings.
+                      </p>
+                    </div>
+  
+                    <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
+                      <button
+                        onClick={handleRefreshHealth}
+                        disabled={isRefreshingHealth}
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold hover:bg-opacity-95 transition-all shadow-md shadow-primary/20 disabled:opacity-60"
+                      >
+                        {isRefreshingHealth ? (
+                          <>
+                            <RefreshCw className="w-4 h-4 animate-spin" />
+                            <span>Connecting...</span>
+                          </>
+                        ) : (
+                          <>
+                            <RefreshCw className="w-4 h-4" />
+                            <span>Retry Gateway</span>
+                          </>
+                        )}
+                      </button>
+                      <Link
+                        to="/settings"
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border/20 bg-muted/20 hover:bg-muted text-foreground font-semibold transition-all"
+                      >
+                        <span>Configure API URL</span>
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="space-y-2">
-                    <h3 className="text-xl font-bold tracking-tight">Security Gateway Offline</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      Aegis cannot communicate with the classification server at <code className="px-1.5 py-0.5 rounded bg-muted text-xs font-semibold">{settings.apiBaseUrl}</code>. Please check your network connection or verify settings.
-                    </p>
-                  </div>
-
-                  <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
-                    <button
-                      onClick={handleRefreshHealth}
-                      disabled={isRefreshingHealth}
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-semibold hover:bg-opacity-95 transition-all shadow-md shadow-primary/20 disabled:opacity-60"
-                    >
-                      {isRefreshingHealth ? (
-                        <>
-                          <RefreshCw className="w-4 h-4 animate-spin" />
-                          <span>Connecting...</span>
-                        </>
-                      ) : (
-                        <>
-                          <RefreshCw className="w-4 h-4" />
-                          <span>Retry Gateway</span>
-                        </>
-                      )}
-                    </button>
-                    <Link
-                      to="/settings"
-                      className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-border/20 bg-muted/20 hover:bg-muted text-foreground font-semibold transition-all"
-                    >
-                      <span>Configure API URL</span>
-                    </Link>
-                  </div>
-                </div>
-              </motion.div>
-            ) : (
-              // Normal Screen Content
-              <motion.div
-                key={location.pathname}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="h-full"
-              >
-                {children}
-              </motion.div>
-            )}
-          </AnimatePresence>
+                </motion.div>
+              ) : (
+                // Normal Screen Content
+                <motion.div
+                  key={location.pathname}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full"
+                >
+                  {children}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </MotionConfig>
         </main>
       </div>
     </div>

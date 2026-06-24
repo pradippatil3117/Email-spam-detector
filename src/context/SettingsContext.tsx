@@ -15,8 +15,25 @@ const defaultSettings: UserSettings = {
   themeMode: "dark", // Default to dark mode for modern enterprise feel
   themeColor: "blue",
   apiBaseUrl: "/api",
-  defaultThreshold: 0.5,
+  defaultThreshold: 0.5393,
   notificationsEnabled: true,
+  landingPage: "dashboard",
+  animationSpeed: "normal",
+  compactMode: false,
+  reducedMotion: false,
+  dateFormat: "YYYY-MM-DD",
+  timeFormat: "12h",
+  spamThresholdOverride: 0.5393,
+  defaultScanView: "split",
+  autoSaveHistory: true,
+  confirmDeleteScan: true,
+  toastNotifications: true,
+  scanCompleteNotification: true,
+  errorNotifications: true,
+  exportSuccessNotification: true,
+  developerMode: false,
+  enableDebugInfo: false,
+  showResponseInspector: false,
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -26,6 +43,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     "email_security_settings",
     defaultSettings
   );
+
+  // Merge settings with defaultSettings to ensure all fields are defined
+  const mergedSettings = React.useMemo(() => {
+    return { ...defaultSettings, ...settings };
+  }, [settings]);
+
   const [isBackendOnline, setIsBackendOnline] = useState<boolean | null>(null);
 
   const updateSettings = useCallback((newSettings: Partial<UserSettings>) => {
@@ -48,8 +71,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const response = await checkHealth();
       setIsBackendOnline(response.status === "ok");
-    } catch (error) {
-      console.error("Health check failed:", error);
+    } catch {
       setIsBackendOnline(false);
     }
   }, []);
@@ -63,7 +85,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Listen to system theme changes if themeMode is "system"
   useEffect(() => {
-    if (settings.themeMode !== "system") return;
+    if (mergedSettings.themeMode !== "system") return;
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e: MediaQueryListEvent) => {
@@ -72,12 +94,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [settings.themeMode, updateSettings]);
+  }, [mergedSettings.themeMode, updateSettings]);
 
   // Apply Theme effects
   useEffect(() => {
     const root = document.documentElement;
-    const isDark = settings.darkMode;
+    const isDark = mergedSettings.darkMode;
 
     // Toggle .dark class
     if (isDark) {
@@ -106,16 +128,32 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       },
     };
 
-    const selected = colors[settings.themeColor] || colors.blue;
+    const selected = colors[mergedSettings.themeColor] || colors.blue;
     const primaryVal = isDark ? selected.dark : selected.light;
     root.style.setProperty("--primary", primaryVal);
     root.style.setProperty("--ring", primaryVal);
-  }, [settings.darkMode, settings.themeColor]);
+  }, [mergedSettings.darkMode, mergedSettings.themeColor]);
+
+  // Apply Compact Mode & Reduced Motion classes to root
+  useEffect(() => {
+    const root = document.documentElement;
+    if (mergedSettings.compactMode) {
+      root.classList.add("compact-mode");
+    } else {
+      root.classList.remove("compact-mode");
+    }
+
+    if (mergedSettings.reducedMotion) {
+      root.classList.add("reduced-motion");
+    } else {
+      root.classList.remove("reduced-motion");
+    }
+  }, [mergedSettings.compactMode, mergedSettings.reducedMotion]);
 
   return (
     <SettingsContext.Provider
       value={{
-        settings,
+        settings: mergedSettings,
         updateSettings,
         isBackendOnline,
         triggerHealthCheck,

@@ -11,8 +11,8 @@ const getApiBaseUrl = (): string => {
         return settings.apiBaseUrl;
       }
     }
-  } catch (e) {
-    console.error("Error parsing API base URL from settings:", e);
+  } catch {
+    // Fallback silently to relative /api
   }
   return "/api";
 };
