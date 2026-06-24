@@ -10,7 +10,6 @@ import {
   Download,
   Upload,
   ShieldAlert,
-  ShieldCheck,
   Activity,
   Terminal,
   Info,

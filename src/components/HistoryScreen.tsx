@@ -5,24 +5,15 @@ import { useSettings } from "../context/SettingsContext";
 import { ScanHistoryItem } from "../types";
 import {
   Search,
-  Filter,
-  ArrowUpDown,
   Download,
   Trash2,
   Eye,
   Copy,
   ChevronLeft,
   ChevronRight,
-  ShieldCheck,
-  ShieldAlert,
-  AlertTriangle,
-  FileText,
-  Activity,
   Clock,
-  Server,
   Cpu,
   X,
-  XCircle,
   Check,
   Calendar,
   AlertCircle
@@ -62,6 +53,7 @@ export const HistoryScreen: React.FC = () => {
       const timer = setTimeout(() => setToast(null), 3000);
       return () => clearTimeout(timer);
     }
+    return () => {};
   }, [toast]);
 
   // Handle pagination reset on filter change

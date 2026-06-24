@@ -11,7 +11,6 @@ import {
   Cpu,
   ArrowRight,
   TrendingUp,
-  Mail,
   Lock,
   ExternalLink
 } from "lucide-react";

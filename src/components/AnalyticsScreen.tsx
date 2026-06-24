@@ -4,21 +4,11 @@ import { useSettings } from "../context/SettingsContext";
 import { ScanHistoryItem, ModelConfig } from "../types";
 import { getModelConfig } from "../services/api";
 import {
-  Activity,
-  ShieldAlert,
   ShieldCheck,
-  Percent,
-  Clock,
-  Server,
-  Cpu,
   Download,
   AlertTriangle,
-  TrendingUp,
   Award,
-  BookOpen,
   Calendar,
-  Layers,
-  BarChart as BarIcon,
   MessageSquare
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -65,6 +55,7 @@ export const AnalyticsScreen: React.FC = () => {
       const timer = setTimeout(() => setToast(null), 3000);
       return () => clearTimeout(timer);
     }
+    return () => {};
   }, [toast]);
 
   // Fetch model config from FastAPI on mount
@@ -880,7 +871,7 @@ export const AnalyticsScreen: React.FC = () => {
                         <YAxis dataKey="keyword" type="category" width={80} style={{ fontSize: "10px" }} />
                         <Tooltip formatter={(value) => [`${value} Times`, "Occurrence"]} />
                         <Bar dataKey="count" fill={COLORS.accent} radius={[0, 4, 4, 0]}>
-                          {chartsData.keywords.map((entry: any, index: number) => (
+                          {chartsData.keywords.map((_: any, index: number) => (
                             <Cell key={`cell-${index}`} fill={COLORS.accent} />
                           ))}
                         </Bar>

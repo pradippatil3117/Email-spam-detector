@@ -85,7 +85,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   // Listen to system theme changes if themeMode is "system"
   useEffect(() => {
-    if (mergedSettings.themeMode !== "system") return;
+    if (mergedSettings.themeMode !== "system") {
+      return () => {};
+    }
 
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e: MediaQueryListEvent) => {

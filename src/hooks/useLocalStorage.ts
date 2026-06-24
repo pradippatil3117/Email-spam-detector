@@ -5,8 +5,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error("useLocalStorage read error:", error);
+    } catch {
       return initialValue;
     }
   });
@@ -14,8 +13,8 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T 
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(storedValue));
-    } catch (error) {
-      console.error("useLocalStorage write error:", error);
+    } catch {
+      // Ignore storage write issues in sandbox
     }
   }, [key, storedValue]);
 

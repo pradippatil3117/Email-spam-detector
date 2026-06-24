@@ -3,27 +3,11 @@ import { useSettings } from "../context/SettingsContext";
 import { getModelConfig, getModelPlotUrl } from "../services/api";
 import { ModelConfig } from "../types";
 import {
-  Cpu,
-  TrendingUp,
-  FileText,
-  Calendar,
-  Layers,
-  ArrowRight,
-  ChevronRight,
   Maximize2,
   Download,
   X,
   Code,
-  Shield,
-  HelpCircle,
-  Clock,
-  Database,
-  Compass,
-  Server,
-  Zap,
-  Activity,
   CheckCircle2,
-  FileCode,
   AlertTriangle,
   RefreshCw
 } from "lucide-react";
@@ -94,6 +78,7 @@ export const ModelScreen: React.FC = () => {
   const [devMode, setDevMode] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
   const [activeCaption, setActiveCaption] = useState<string>("");
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
 
   const fetchConfig = async () => {
     setLoading(true);
@@ -300,11 +285,20 @@ export const ModelScreen: React.FC = () => {
 
                       {/* Image Preview Container */}
                       <div className="relative aspect-video rounded-xl overflow-hidden bg-black/10 dark:bg-white/5 border border-border/5 flex items-center justify-center">
-                        <img
-                          src={url}
-                          alt={plot.title}
-                          className="w-full h-full object-cover transition-transform group-hover:scale-102"
-                        />
+                        {imageErrors[plot.id] ? (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-muted/20 text-muted-foreground p-3 text-center">
+                            <AlertTriangle className="w-6 h-6 text-muted-foreground/50 mb-1.5 animate-pulse" />
+                            <span className="font-bold text-[10px] tracking-tight">Plot Unavailable</span>
+                            <span className="text-[8px] text-muted-foreground/70 mt-0.5">Engine offline or missing files</span>
+                          </div>
+                        ) : (
+                          <img
+                            src={url}
+                            alt={plot.title}
+                            onError={() => setImageErrors(prev => ({ ...prev, [plot.id]: true }))}
+                            className="w-full h-full object-cover transition-transform group-hover:scale-102"
+                          />
+                        )}
                         {/* Hover Overlay triggers */}
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                           <button

@@ -15,7 +15,6 @@ import {
   AlertCircle,
   CheckCircle2,
   RefreshCw,
-  Server,
   AlertTriangle,
   XCircle,
   Code
@@ -44,8 +43,8 @@ const scanStages = [
 ];
 
 export const ScannerScreen: React.FC = () => {
-  const { settings, isBackendOnline } = useSettings();
-  const [history, setHistory] = useLocalStorage<ScanHistoryItem[]>("email_security_history", getSeedHistory());
+  const { settings } = useSettings();
+  const [, setHistory] = useLocalStorage<ScanHistoryItem[]>("email_security_history", getSeedHistory());
   const [scanStatus, setScanStatus] = useState<"idle" | "scanning" | "success" | "error">("idle");
   const [currentStage, setCurrentStage] = useState(0);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);

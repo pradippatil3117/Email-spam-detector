@@ -9,12 +9,10 @@ import {
   Cpu,
   Settings as SettingsIcon,
   Menu,
-  X,
   Sun,
   Moon,
   Laptop,
   Shield,
-  ShieldCheck,
   RefreshCw,
   Search,
   ChevronLeft,
@@ -93,7 +91,6 @@ export const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     setIsRefreshingHealth(false);
   };
 
-  const activeNavItem = navItems.find((item) => item.path === location.pathname) || navItems[0];
 
   return (
     <div className="min-h-screen flex bg-background text-foreground transition-colors duration-300">

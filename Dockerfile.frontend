@@ -1,0 +1,30 @@
+# Stage 1: Build React static bundle and compile Express gateway
+FROM node:20-slim AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+# Stage 2: Production release image
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Copy built assets from builder stage
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 3000
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV SPAWN_BACKEND=false
+ENV BACKEND_URL=http://backend:8000
+
+CMD ["node", "dist/server.cjs"]

@@ -4,11 +4,14 @@ import App from './App.tsx';
 import './index.css';
 
 import { SettingsProvider } from './context/SettingsContext.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SettingsProvider>
-      <App />
-    </SettingsProvider>
+    <ErrorBoundary>
+      <SettingsProvider>
+        <App />
+      </SettingsProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

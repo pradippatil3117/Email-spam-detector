@@ -7,21 +7,25 @@ async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Start FastAPI backend
-  const isWindows = process.platform === "win32";
-  const pythonCmd = isWindows ? path.join("backend", "venv", "Scripts", "python.exe") : "python3";
-  const pythonProcess = spawn(pythonCmd, ["-m", "uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]);
-  
-  pythonProcess.stdout.on('data', (data) => console.log(`FastAPI: ${data}`));
-  pythonProcess.stderr.on('data', (data) => console.error(`FastAPI Error: ${data}`));
+  // Start FastAPI backend if needed
+  const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8000";
+  const spawnBackend = process.env.SPAWN_BACKEND !== "false" && (BACKEND_URL.includes("localhost") || BACKEND_URL.includes("127.0.0.1"));
 
+  if (spawnBackend) {
+    const isWindows = process.platform === "win32";
+    const pythonCmd = isWindows ? path.join("backend", "venv", "Scripts", "python.exe") : "python3";
+    const pythonProcess = spawn(pythonCmd, ["-m", "uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]);
+    
+    pythonProcess.stdout.on('data', (data) => console.log(`FastAPI: ${data}`));
+    pythonProcess.stderr.on('data', (data) => console.error(`FastAPI Error: ${data}`));
+  }
 
   app.use(express.json());
 
   // Proxy API requests to FastAPI
   app.use("/api", async (req, res) => {
     try {
-      const target = `http://localhost:8000${req.originalUrl}`;
+      const target = `${BACKEND_URL}${req.originalUrl}`;
       
       const headers: Record<string, string> = {};
       for (const [key, value] of Object.entries(req.headers)) {
@@ -77,7 +81,7 @@ async function startServer() {
   } else {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
