@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -15,14 +15,14 @@ import {
   AlertCircle,
   CheckCircle2,
   RefreshCw,
-  Info,
-  CornerDownLeft,
-  FileText,
-  Server
+  Server,
+  AlertTriangle,
+  XCircle,
+  Code
 } from "lucide-react";
 import { useSettings } from "../context/SettingsContext";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { predictSpam } from "../services/api";
+import { predictSpam, getModelConfig } from "../services/api";
 import { ScanResult, ScanHistoryItem } from "../types";
 import { getSeedHistory } from "../utils/seedData";
 
@@ -36,11 +36,11 @@ const scanSchema = z.object({
 type ScanFormData = z.infer<typeof scanSchema>;
 
 const scanStages = [
-  { id: 0, label: "Validating email structure" },
-  { id: 1, label: "Checking sender reputation" },
-  { id: 2, label: "Running NLP feature extraction" },
-  { id: 3, label: "Evaluating spam probability" },
-  { id: 4, label: "Generating security report" },
+  { id: 0, label: "Validating email structure..." },
+  { id: 1, label: "Checking sender reputation..." },
+  { id: 2, label: "Running NLP feature extraction..." },
+  { id: 3, label: "Evaluating spam probability..." },
+  { id: 4, label: "Generating security report..." },
 ];
 
 export const ScannerScreen: React.FC = () => {
@@ -50,6 +50,27 @@ export const ScannerScreen: React.FC = () => {
   const [currentStage, setCurrentStage] = useState(0);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [devMode, setDevMode] = useState(false);
+  const [modelThreshold, setModelThreshold] = useState<number>(0.72);
+
+  // Fetch model threshold from backend on mount
+  useEffect(() => {
+    let active = true;
+    const fetchConfig = async () => {
+      try {
+        const config = await getModelConfig();
+        if (active && config && config.threshold) {
+          setModelThreshold(config.threshold);
+        }
+      } catch {
+        // Fallback silently without logging to console
+      }
+    };
+    fetchConfig();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const {
     register,
@@ -84,7 +105,7 @@ export const ScannerScreen: React.FC = () => {
           return prev;
         }
       });
-    }, 4500 / scanStages.length); // complete stages in ~4.5 seconds
+    }, 4000 / scanStages.length); // complete stages in ~4 seconds
 
     const startTime = Date.now();
 
@@ -98,7 +119,7 @@ export const ScannerScreen: React.FC = () => {
 
       // Calculate time remaining to let the visual stages finish
       const elapsedTime = Date.now() - startTime;
-      const delayTime = Math.max(0, 4500 - elapsedTime);
+      const delayTime = Math.max(0, 4000 - elapsedTime);
 
       // Wait for stages to complete visually
       await new Promise((resolve) => setTimeout(resolve, delayTime));
@@ -141,16 +162,93 @@ export const ScannerScreen: React.FC = () => {
     }
   };
 
+  // Determine confidence-aware messaging properties
+  const getConfidenceMessaging = (score: number, prediction: "Spam" | "Safe") => {
+    // Spam Probability levels:
+    // < 30% -> SAFE (Green)
+    // 30% - 60% -> BORDERLINE (Amber)
+    // > 60% -> SPAM (Red)
+    if (score < 0.3) {
+      return {
+        status: "SAFE",
+        recommendation: "Safe to open.",
+        riskLevel: "Low",
+        description: "The classifier found no statistically significant spam indicators.",
+        badgeColor: "text-emerald-500 bg-emerald-500/10 border-emerald-500/20",
+        barColor: "bg-emerald-500",
+        gradientClass: "from-emerald-500/15 to-emerald-600/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+        glowColor: "shadow-emerald-500/10",
+        icon: ShieldCheck,
+        recoCard: {
+          title: "Safe to Open",
+          desc: "This email has passed all security checks. No threat patterns or suspicious keywords were detected.",
+          style: "bg-emerald-500/5 border-emerald-500/20 text-emerald-600 dark:text-emerald-400",
+          icon: CheckCircle2
+        }
+      };
+    } else if (score >= 0.3 && score <= 0.6) {
+      return {
+        status: "BORDERLINE",
+        recommendation: "Manual review recommended.",
+        riskLevel: "Medium",
+        description: "This email contains ambiguous language or moderate indicators. Exercise caution.",
+        badgeColor: "text-amber-500 bg-amber-500/10 border-amber-500/20",
+        barColor: "bg-amber-500",
+        gradientClass: "from-amber-500/15 to-amber-600/5 border-amber-500/20 text-amber-600 dark:text-amber-400",
+        glowColor: "shadow-amber-500/10",
+        icon: AlertTriangle,
+        recoCard: {
+          title: "Review Before Opening",
+          desc: "Moderate probability of promotional or phishing patterns. Inspect links and attachments carefully before opening.",
+          style: "bg-amber-500/5 border-amber-500/20 text-amber-600 dark:text-amber-400",
+          icon: AlertTriangle
+        }
+      };
+    } else {
+      return {
+        status: "SPAM",
+        recommendation: "Delete or quarantine immediately.",
+        riskLevel: "High",
+        description: "High spam probability detected. Contains active threat markers or phishing indicators.",
+        badgeColor: "text-destructive bg-destructive/10 border-destructive/20",
+        barColor: "bg-destructive",
+        gradientClass: "from-destructive/15 to-destructive/20 border-destructive/20 text-destructive dark:text-destructive-foreground",
+        glowColor: "shadow-destructive/10",
+        icon: ShieldAlert,
+        recoCard: {
+          title: "Delete Immediately",
+          desc: "Critical spam signature matched. Recommended action is immediate quarantine or deletion to prevent security breach.",
+          style: "bg-destructive/5 border-destructive/20 text-destructive dark:text-destructive-foreground",
+          icon: XCircle
+        }
+      };
+    }
+  };
+
+  const currentResultMeta = scanResult ? getConfidenceMessaging(scanResult.spam_score, scanResult.prediction) : null;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* LEFT COLUMN: Input Form */}
       <div className="lg:col-span-6 space-y-6">
         <div className="p-6 rounded-2xl glass-panel border space-y-6">
-          <div>
-            <h3 className="text-lg font-bold tracking-tight">Security Scan Console</h3>
-            <p className="text-xs text-muted-foreground mt-1">
-              Analyze SMTP payload details through Aegis AI vector boundaries.
-            </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold tracking-tight">Security Scan Console</h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Analyze SMTP payload details through Aegis AI vector boundaries.
+              </p>
+            </div>
+            <button
+              onClick={() => setDevMode(!devMode)}
+              className={`text-[10px] font-bold px-2 py-1 rounded-md border transition-all flex items-center gap-1.5 ${
+                devMode ? "bg-primary/10 text-primary border-primary/25" : "bg-muted text-muted-foreground border-border/10"
+              }`}
+              aria-label="Toggle developer mode"
+            >
+              <Code className="w-3 h-3" />
+              <span>Dev Mode</span>
+            </button>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -298,16 +396,19 @@ export const ScannerScreen: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="p-8 rounded-2xl glass-panel border flex flex-col justify-between h-[440px] relative overflow-hidden"
+              className="p-8 rounded-2xl glass-panel border flex flex-col justify-between h-[450px] relative overflow-hidden"
             >
-              {/* Pulsing Scanner Radar */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-                <div className="w-96 h-96 rounded-full border-4 border-primary animate-ping" />
-                <div className="w-64 h-64 rounded-full border-2 border-primary animate-pulse absolute" />
+              {/* Pulsing Radar sweep */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-[0.04] pointer-events-none">
+                <div className="w-80 h-80 rounded-full border-4 border-primary animate-ping" />
+                <div className="w-56 h-56 rounded-full border-2 border-primary animate-pulse absolute" />
               </div>
 
               <div className="space-y-4">
-                <h4 className="font-bold text-sm tracking-wide text-primary uppercase">Active Auditing Engine</h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold text-sm tracking-wide text-primary uppercase">Active Auditing Engine</h4>
+                  <span className="text-xs font-bold text-muted-foreground">Step {currentStage + 1} of 5</span>
+                </div>
                 <div className="space-y-2.5">
                   {scanStages.map((stage) => {
                     const isCompleted = currentStage > stage.id;
@@ -345,7 +446,7 @@ export const ScannerScreen: React.FC = () => {
               {/* Progress indicator */}
               <div className="space-y-2 mt-4 pt-4 border-t border-border/5">
                 <div className="flex items-center justify-between text-xs font-semibold">
-                  <span className="text-muted-foreground">Audit Progress</span>
+                  <span className="text-muted-foreground">Analyzing vector signatures</span>
                   <span className="text-primary">{Math.round(((currentStage + 1) / scanStages.length) * 100)}%</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full bg-muted/40 overflow-hidden">
@@ -361,7 +462,7 @@ export const ScannerScreen: React.FC = () => {
           )}
 
           {/* SCENARIO 3: Scan Results Display */}
-          {scanStatus === "success" && scanResult && (
+          {scanStatus === "success" && scanResult && currentResultMeta && (
             <motion.div
               key="success"
               initial={{ opacity: 0, y: 15 }}
@@ -369,42 +470,36 @@ export const ScannerScreen: React.FC = () => {
               exit={{ opacity: 0, y: -15 }}
               className="space-y-6"
             >
-              {/* Header Gradient Card */}
+              {/* Header Gradient Card with custom status */}
               <div
-                className={`p-6 rounded-2xl shadow-xl border text-white relative overflow-hidden ${
-                  scanResult.prediction === "Spam" ? "bg-gradient-spam border-spam/10" : "bg-gradient-safe border-safe/10"
-                }`}
+                className={`p-6 rounded-2xl shadow-xl border relative overflow-hidden flex flex-col justify-between ${currentResultMeta.gradientClass} ${currentResultMeta.glowColor}`}
               >
                 {/* Glow ring overlay */}
                 <div className="absolute right-0 top-0 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none -translate-y-12 translate-x-12" />
 
                 <div className="flex items-center justify-between">
                   <div className="space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-white/10 px-2 py-0.5 rounded border border-white/10">
+                    <span className="text-[10px] font-bold uppercase tracking-wider bg-black/10 dark:bg-white/10 px-2.5 py-0.5 rounded border border-border/5">
                       Audit Classification
                     </span>
-                    <h3 className="text-2xl font-extrabold tracking-tight">
-                      EMAIL FLAGGED AS {scanResult.prediction.toUpperCase()}
+                    <h3 className="text-3xl font-extrabold tracking-tight mt-1">
+                      {currentResultMeta.status}
                     </h3>
                   </div>
-                  <div className="p-3 rounded-xl bg-white/10 border border-white/10 shadow-lg">
-                    {scanResult.prediction === "Spam" ? (
-                      <ShieldAlert className="w-7 h-7" />
-                    ) : (
-                      <ShieldCheck className="w-7 h-7" />
-                    )}
+                  <div className={`p-3 rounded-xl border shadow-lg ${currentResultMeta.badgeColor}`}>
+                    <currentResultMeta.icon className="w-7 h-7" />
                   </div>
                 </div>
 
                 {/* Score & Meter */}
                 <div className="mt-6 space-y-2">
                   <div className="flex justify-between items-end text-xs font-semibold">
-                    <span className="text-white/80">Classifier Spam Probability</span>
+                    <span className="opacity-80">Spam Probability</span>
                     <span className="text-sm font-bold">{(scanResult.spam_score * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="w-full h-2 rounded-full bg-white/15 overflow-hidden">
+                  <div className="w-full h-2 rounded-full bg-black/10 dark:bg-white/10 overflow-hidden">
                     <motion.div
-                      className="h-full bg-white shadow-glow"
+                      className={`h-full shadow-glow ${currentResultMeta.barColor}`}
                       initial={{ width: 0 }}
                       animate={{ width: `${scanResult.spam_score * 100}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
@@ -413,37 +508,52 @@ export const ScannerScreen: React.FC = () => {
                 </div>
               </div>
 
+              {/* Recommendation Card */}
+              <div className={`p-4 rounded-xl border flex gap-3.5 items-start ${currentResultMeta.recoCard.style}`}>
+                <div className="p-2.5 rounded-lg border border-current bg-white/10 shrink-0">
+                  <currentResultMeta.recoCard.icon className="w-5 h-5" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-bold text-sm leading-none flex items-center gap-1.5">
+                    {currentResultMeta.recoCard.title}
+                  </h4>
+                  <p className="text-xs opacity-85 leading-normal">
+                    {currentResultMeta.recoCard.desc}
+                  </p>
+                </div>
+              </div>
+
               {/* Security Metrics Dashboard Grid */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Risk Level</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Threat Level</span>
                   <div className="flex items-center gap-1.5 font-bold text-sm">
                     <span
                       className={`w-2.5 h-2.5 rounded-full ${
-                        scanResult.risk_level === "High"
+                        currentResultMeta.riskLevel === "High"
                           ? "bg-destructive animate-pulse"
-                          : scanResult.risk_level === "Medium"
+                          : currentResultMeta.riskLevel === "Medium"
                           ? "bg-amber-500"
                           : "bg-emerald-500"
                       }`}
                     />
                     <span
                       className={
-                        scanResult.risk_level === "High"
+                        currentResultMeta.riskLevel === "High"
                           ? "text-destructive"
-                          : scanResult.risk_level === "Medium"
+                          : currentResultMeta.riskLevel === "Medium"
                           ? "text-amber-500"
                           : "text-emerald-500"
                       }
                     >
-                      {scanResult.risk_level} Risk
+                      {currentResultMeta.riskLevel} Risk
                     </span>
                   </div>
                 </div>
 
                 <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Confidence</span>
-                  <div className="font-bold text-sm">{(scanResult.confidence * 100).toFixed(1)}% Match</div>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Model Confidence</span>
+                  <div className="font-bold text-sm">{(scanResult.confidence * 100).toFixed(1)}%</div>
                 </div>
 
                 <div className="p-4 rounded-xl glass-panel border space-y-1">
@@ -455,15 +565,38 @@ export const ScannerScreen: React.FC = () => {
                 </div>
 
                 <div className="p-4 rounded-xl glass-panel border space-y-1">
-                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Gateway Port</span>
-                  <div className="font-bold text-sm flex items-center gap-1.5">
-                    <Server className="w-4 h-4 text-emerald-500" />
-                    <span>127.0.0.1:8000</span>
+                  <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Backend Status</span>
+                  <div className="font-bold text-xs flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block" />
+                    <span className="truncate">
+                      {devMode ? "127.0.0.1:8000" : "FastAPI Healthy"}
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Reasons & Keywords */}
+              {/* Three Independent Metrics Grid Card */}
+              <div className="p-5 rounded-2xl glass-panel border space-y-4">
+                <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground border-b border-border/5 pb-2">
+                  Security Diagnostics summary
+                </h4>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
+                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Spam Score</span>
+                    <span className="text-base font-extrabold">{scanResult.spam_score.toFixed(3)}</span>
+                  </div>
+                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
+                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Spam Prob.</span>
+                    <span className="text-base font-extrabold">{(scanResult.spam_score * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="space-y-1 p-2 bg-muted/10 rounded-xl border border-border/5">
+                    <span className="text-[9px] font-semibold text-muted-foreground uppercase tracking-wider block">Confidence</span>
+                    <span className="text-base font-extrabold">{(scanResult.confidence * 100).toFixed(1)}%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Threat Explanation details */}
               <div className="p-5 rounded-2xl glass-panel border space-y-4">
                 <h4 className="font-bold text-xs uppercase tracking-wider text-muted-foreground border-b border-border/5 pb-2">
                   Threat Explanation details
@@ -471,8 +604,8 @@ export const ScannerScreen: React.FC = () => {
 
                 {/* Detected Keywords */}
                 {scanResult.suspicious_keywords.length > 0 ? (
-                  <div className="space-y-1.5">
-                    <span className="text-[10px] font-bold text-muted-foreground">Suspicious Vocabulary Flags:</span>
+                  <div className="space-y-2">
+                    <span className="text-[10px] font-bold text-muted-foreground">Detected suspicious keywords:</span>
                     <div className="flex flex-wrap gap-1.5">
                       {scanResult.suspicious_keywords.map((word, idx) => (
                         <span key={idx} className="px-2 py-0.5 text-[10px] font-bold rounded bg-destructive/10 text-destructive border border-destructive/20">
@@ -480,11 +613,16 @@ export const ScannerScreen: React.FC = () => {
                         </span>
                       ))}
                     </div>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-1">
+                      These suspicious keywords were identified in the email copy. Terms like {scanResult.suspicious_keywords.slice(0, 3).map(w => `"${w}"`).join(", ")} frequently appear in promotional or phishing scripts, which highly contributed to this classification.
+                    </p>
                   </div>
                 ) : (
-                  <div className="space-y-1">
+                  <div className="space-y-1.5">
                     <span className="text-[10px] font-bold text-muted-foreground">Suspicious Vocabulary Flags:</span>
-                    <p className="text-[10px] text-muted-foreground">None detected</p>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      No suspicious keywords were detected. The classifier found no statistically significant spam indicators.
+                    </p>
                   </div>
                 )}
 
@@ -495,13 +633,34 @@ export const ScannerScreen: React.FC = () => {
                     <ul className="space-y-1.5 text-xs">
                       {scanResult.reasons.map((reason, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <span className="w-1 h-1 rounded-full bg-primary mt-1.5 shrink-0" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 shrink-0" />
                           <span className="text-muted-foreground">{reason}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
                 )}
+              </div>
+
+              {/* Model Information Card */}
+              <div className="p-4 rounded-xl glass-panel border flex items-start gap-3 text-xs">
+                <div className="p-2 rounded-lg bg-primary/10 text-primary border border-primary/20 shrink-0">
+                  <Cpu className="w-4.5 h-4.5" />
+                </div>
+                <div className="space-y-1 flex-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-muted-foreground uppercase tracking-wider text-[9px]">Model Parameters</span>
+                    <span className="text-primary font-bold">Inference active</span>
+                  </div>
+                  <div className="grid grid-cols-2 gap-y-1 text-muted-foreground text-[11px] pt-1">
+                    <div>Classifier:</div>
+                    <div className="text-foreground font-semibold text-right">TF-IDF + Logistic Regression</div>
+                    <div>Version:</div>
+                    <div className="text-foreground font-semibold text-right">1.0.0</div>
+                    <div>Decision Threshold:</div>
+                    <div className="text-foreground font-semibold text-right">{modelThreshold.toFixed(2)}</div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}
